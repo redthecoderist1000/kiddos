@@ -12,7 +12,7 @@ class HomePState extends State<HomeP> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text('Home Page Parent')],
+      children: [Text('Home Page (parent)')],
     );
   }
 }

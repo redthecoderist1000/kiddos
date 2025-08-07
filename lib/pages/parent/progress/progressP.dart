@@ -12,7 +12,7 @@ class _ProgressPState extends State<ProgressP> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text('Progress Page Parent')],
+      children: [Text('Progress Page (parent)')],
     );
   }
 }

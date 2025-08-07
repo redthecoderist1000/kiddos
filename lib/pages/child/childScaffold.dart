@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class ParentScaffold extends StatefulWidget {
+class ChildScaffold extends StatelessWidget {
   final StatefulNavigationShell child;
-  const ParentScaffold({super.key, required this.child});
+  const ChildScaffold({super.key, required this.child});
 
-  @override
-  State<ParentScaffold> createState() => _ParentScaffoldState();
-}
-
-class _ParentScaffoldState extends State<ParentScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(child: widget.child),
+      body: SafeArea(child: child),
       bottomNavigationBar: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
@@ -39,11 +34,11 @@ class _ParentScaffoldState extends State<ParentScaffold> {
         ),
         child: BottomNavigationBar(
           backgroundColor: Colors.white,
-          currentIndex: widget.child.currentIndex,
-          onTap: widget.child.goBranch,
+          currentIndex: child.currentIndex,
+          onTap: child.goBranch,
           type: BottomNavigationBarType.shifting,
           unselectedItemColor: Colors.grey.shade400,
-          selectedItemColor: Colors.deepPurpleAccent,
+          selectedItemColor: Colors.deepPurple,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_rounded),
@@ -51,17 +46,12 @@ class _ParentScaffoldState extends State<ParentScaffold> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.checklist_rounded),
-              label: 'Task',
+              label: 'Tasks',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.insights_rounded),
-              label: 'Progess',
+              icon: Icon(Icons.card_giftcard_rounded),
+              label: 'Rewards',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.family_restroom_rounded),
-              label: 'Profiles',
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.face), label: 'Me'),
           ],
         ),
       ),

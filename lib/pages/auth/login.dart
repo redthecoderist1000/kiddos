@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +18,7 @@ class _LoginState extends State<Login> {
 
         MaterialButton(
           onPressed: () {
-            context.go('/home-parent');
+            context.push('/home-parent');
           },
           elevation: 0,
           textColor: Colors.white,
@@ -27,7 +26,9 @@ class _LoginState extends State<Login> {
           child: Text('login (parent)'),
         ),
         MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            context.push('/home-child');
+          },
           elevation: 0,
           textColor: Colors.white,
           color: Colors.deepPurple,

@@ -12,7 +12,7 @@ class ProfilePState extends State<ProfileP> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text('Profile Parent')],
+      children: [Text('Profile (parent)')],
     );
   }
 }

@@ -5,8 +5,13 @@ import 'package:kiddos/pages/auth/authPage.dart';
 import 'package:kiddos/pages/auth/login.dart';
 import 'package:kiddos/pages/auth/otpPage.dart';
 import 'package:kiddos/pages/auth/register.dart';
+import 'package:kiddos/pages/child/childScaffold.dart';
+import 'package:kiddos/pages/child/homeC/homeC.dart';
+import 'package:kiddos/pages/child/rewardC/rewardC.dart';
+import 'package:kiddos/pages/child/taskC/taskC.dart';
 import 'package:kiddos/pages/parent/home/HomeP.dart';
 import 'package:kiddos/pages/parent/me/me.dart';
+import 'package:kiddos/pages/parent/me/settings.dart';
 import 'package:kiddos/pages/parent/parentScaffold.dart';
 import 'package:kiddos/pages/parent/profile/profileP.dart';
 import 'package:kiddos/pages/parent/progress/progressP.dart';
@@ -81,11 +86,49 @@ GoRouter router = GoRouter(
         ),
         StatefulShellBranch(
           routes: [
-            GoRoute(path: '/me', builder: (context, state) => const MeP()),
+            GoRoute(
+              path: '/me-parent',
+              builder: (context, state) => const MeP(),
+            ),
+            GoRoute(
+              path: '/settings-parent',
+              builder: (context, state) => const SettingsP(),
+            ),
           ],
         ),
       ],
     ),
     // routes for child
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, child) {
+        return ChildScaffold(child: child);
+      },
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/home-child',
+              builder: (context, state) => const HomeC(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/task-child',
+              builder: (context, state) => const TaskC(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/reward-child',
+              builder: (context, state) => const RewardC(),
+            ),
+          ],
+        ),
+      ],
+    ),
   ],
 );

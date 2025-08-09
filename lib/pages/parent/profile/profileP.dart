@@ -33,7 +33,6 @@ class ProfilePState extends State<ProfileP> {
       'roleLabelColor': Color(0xFFFFC700),
       'age': '8',
     },
-
   ];
 
   void _addMember(Map<String, dynamic> member) {
@@ -53,63 +52,47 @@ class ProfilePState extends State<ProfileP> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.width < 400;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: isSmall ? 10.0 : 20.0,
-              vertical: isSmall ? 12.0 : 24.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Manage Users',
-                  style: TextStyle(
-                    fontSize: isSmall ? 24 : 32,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF8B3EFF),
-                  ),
-                ),
-                SizedBox(height: isSmall ? 4 : 8),
-                Text(
-                  "Manage your Kiddo's family",
-                  style: TextStyle(
-                    fontSize: isSmall ? 13 : 16,
-                    color: Colors.black87,
-                  ),
-                ),
-                SizedBox(height: isSmall ? 16 : 28),
-                AddFamilyButton(
-                  onMemberAdded: () async {
-                    // TODO: addmember logic;
-                  },
-                ),
-                SizedBox(height: isSmall ? 16 : 24),
-                FamilyMemberList(
-                  members: members,
-                  isSmall: isSmall,
-                  onEdit: (index, member) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => EditFamilyMemberDialog(
-                        member: member,
-                        onSave: (updatedMember) {
-                          _editMember(index, updatedMember);
-                        },
-                      ),
-                    );
-                  },
-                ),
-                SizedBox(height: isSmall ? 20 : 32),
-                FamilyCount(isSmall: isSmall),
-              ],
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Manage Users',
+          style: TextStyle(
+            fontSize: isSmall ? 24 : 32,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF8B3EFF),
           ),
         ),
-      ),
+        SizedBox(height: isSmall ? 4 : 8),
+        Text(
+          "Manage your Kiddo's family",
+          style: TextStyle(fontSize: isSmall ? 13 : 16, color: Colors.black87),
+        ),
+        SizedBox(height: isSmall ? 16 : 28),
+        AddFamilyButton(
+          onMemberAdded: () async {
+            // TODO: addmember logic;
+          },
+        ),
+        SizedBox(height: isSmall ? 16 : 24),
+        FamilyMemberList(
+          members: members,
+          isSmall: isSmall,
+          onEdit: (index, member) {
+            showDialog(
+              context: context,
+              builder: (context) => EditFamilyMemberDialog(
+                member: member,
+                onSave: (updatedMember) {
+                  _editMember(index, updatedMember);
+                },
+              ),
+            );
+          },
+        ),
+        SizedBox(height: isSmall ? 20 : 32),
+        FamilyCount(isSmall: isSmall),
+      ],
     );
   }
 }

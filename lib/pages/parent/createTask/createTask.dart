@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HomeC extends StatefulWidget {
-  const HomeC({super.key});
+class CreateTask extends StatefulWidget {
+  const CreateTask({super.key});
 
   @override
-  State<HomeC> createState() => _HomeCState();
+  State<CreateTask> createState() => _CreateTaskState();
 }
 
-class _HomeCState extends State<HomeC> {
+class _CreateTaskState extends State<CreateTask> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -16,7 +16,7 @@ class _HomeCState extends State<HomeC> {
         // no need for scaffold
 
         // start coding here...
-        Text('Home Page (child)'),
+        Text('Create Task Page (parent)'),
       ],
     );
   }

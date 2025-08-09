@@ -13,61 +13,52 @@ class SettingsP extends StatefulWidget {
 class _SettingsPState extends State<SettingsP> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            const Text(
-              'Settings',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF7A1FA0),
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              "Manage your kiddo's account and preferences",
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-            
-            const SizedBox(height: 24),
-            
-            // Edit Profile Section
-            _buildSection(
-              icon: Icons.person_outline,
-              title: 'Edit Profile',
-              subtitle: 'Update your personal information and profile picture',
-              child: const EditProfile(),
-            ),
-            
-            const SizedBox(height: 20),
-            
-            // Change Password Section
-            _buildSection(
-              icon: Icons.lock_outline,
-              title: 'Change Password',
-              subtitle: 'Update your password to keep your account secure',
-              child: const ChangePassword(),
-            ),
-            
-            const SizedBox(height: 20),
-            
-            // Delete Account Section
-            const DeleteAccount(),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Header
+        const Text(
+          'Settings',
+          style: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF7A1FA0),
+          ),
         ),
-      ),
+        const SizedBox(height: 8),
+        const Text(
+          "Manage your kiddo's account and preferences",
+          style: TextStyle(fontSize: 14, color: Colors.grey),
+        ),
+
+        const SizedBox(height: 24),
+
+        // Edit Profile Section
+        _buildSection(
+          icon: Icons.person_outline,
+          title: 'Edit Profile',
+          subtitle: 'Update your personal information and profile picture',
+          child: const EditProfile(),
+        ),
+
+        const SizedBox(height: 20),
+
+        // Change Password Section
+        _buildSection(
+          icon: Icons.lock_outline,
+          title: 'Change Password',
+          subtitle: 'Update your password to keep your account secure',
+          child: const ChangePassword(),
+        ),
+
+        const SizedBox(height: 20),
+
+        // Delete Account Section
+        const DeleteAccount(),
+      ],
     );
   }
-  
+
   Widget _buildSection({
     required IconData icon,
     required String title,

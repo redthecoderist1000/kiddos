@@ -12,7 +12,12 @@ class _RewardCState extends State<RewardC> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text('Reawrds Page (child)')],
+      children: [
+        // no need for scaffold
+
+        // start coding here...
+        Text('Reawrds Page (child)'),
+      ],
     );
   }
 }

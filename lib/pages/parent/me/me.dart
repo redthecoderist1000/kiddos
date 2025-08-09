@@ -14,6 +14,9 @@ class _MePState extends State<MeP> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // no need for scaffold
+
+        // start coding here...
         Text('Me Page (parent)'),
         MaterialButton(
           onPressed: () {

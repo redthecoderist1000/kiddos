@@ -13,8 +13,17 @@ class _ParentScaffoldState extends State<ParentScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(child: widget.child),
+      backgroundColor: widget.child.currentIndex == 0
+          ? Color.fromARGB(255, 239, 207, 245)
+          : Colors.grey[50],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: widget.child,
+          ),
+        ),
+      ),
       bottomNavigationBar: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(

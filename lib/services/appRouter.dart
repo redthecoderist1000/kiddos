@@ -9,9 +9,10 @@ import 'package:kiddos/pages/child/childScaffold.dart';
 import 'package:kiddos/pages/child/homeC/homeC.dart';
 import 'package:kiddos/pages/child/rewardC/rewardC.dart';
 import 'package:kiddos/pages/child/taskC/taskC.dart';
+import 'package:kiddos/pages/parent/createTask/createTask.dart';
 import 'package:kiddos/pages/parent/home/HomeP.dart';
 import 'package:kiddos/pages/parent/me/me.dart';
-import 'package:kiddos/pages/parent/me/settings.dart';
+import 'package:kiddos/pages/parent/me/settings/settings_page.dart';
 import 'package:kiddos/pages/parent/parentScaffold.dart';
 import 'package:kiddos/pages/parent/profile/profileP.dart';
 import 'package:kiddos/pages/parent/progress/progressP.dart';
@@ -57,6 +58,10 @@ GoRouter router = GoRouter(
             GoRoute(
               path: '/home-parent',
               builder: (context, state) => const HomeP(),
+            ),
+            GoRoute(
+              path: '/create-task',
+              builder: (context, state) => const CreateTask(),
             ),
           ],
         ),

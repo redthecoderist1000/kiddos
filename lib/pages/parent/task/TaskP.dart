@@ -12,7 +12,12 @@ class _TaskPState extends State<TaskP> {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [Text('Task Page (parent)')],
+      children: [
+        // no need for scaffold
+
+        // start coding here...
+        Text('Task Page (parent)'),
+      ],
     );
   }
 }

@@ -311,7 +311,6 @@ class HomePState extends State<HomeP> {
       ],
     );
   }
-  
   Widget _buildFamilyMember(String name, String subtitle, String progress) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),

@@ -273,6 +273,7 @@ class HomePState extends State<HomeP> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 16,
             children: [
               const Row(
                 children: [
@@ -284,7 +285,6 @@ class HomePState extends State<HomeP> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
               _buildFamilyMember('Emma', '4 tasks completed', '4/12'),
               _buildFamilyMember('Max', '3 tasks completed', '3/12'),
               _buildFamilyMember('Sophie', '5 tasks completed', '1/12'),

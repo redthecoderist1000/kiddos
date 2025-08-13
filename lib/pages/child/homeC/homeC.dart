@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_page/home_stats.dart';
 import 'home_page/home_task_card.dart';
 import 'home_page/home_points_card.dart';
+import 'home_page/home_header.dart';
 
 class HomeC extends StatefulWidget {
   const HomeC({super.key});
@@ -13,51 +14,36 @@ class HomeC extends StatefulWidget {
 class _HomeCState extends State<HomeC> {
   List<bool> doneStates = [true, false, false]; // Example for 3 cards
 
+  // Example backend data
+  final String userName = "Miah";
+  final String greetingEmoji = "👋";
+  final String scheduleText = "Here's what's on your schedule today.";
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(20),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Text(
-                    'Hello Lily!',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF9810FA),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text('👋', style: TextStyle(fontSize: 28)),
-                ],
-              ),
-              const SizedBox(height: 6),
-              const Text(
-                "Here's what's on your schedule today.",
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            ],
+          // Header (now separated and backend-friendly)
+          HomeHeader(
+            name: userName,
+            greeting: greetingEmoji,
+            subtitle: scheduleText,
           ),
           const SizedBox(height: 24),
 
           // Stats Row
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: const HomeStats(),
           ),
           const SizedBox(height: 24),
 
           // Task Cards
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Column(
               children: [
                 HomeTaskCard(
@@ -104,10 +90,25 @@ class _HomeCState extends State<HomeC> {
                     });
                   },
                 ),
+                const SizedBox(height: 16),
+                HomeTaskCard(
+                  color: const Color(0xFF4D9FFF),
+                  icon: Icons.menu_book,
+                  iconColor: Colors.white,
+                  category: 'learning',
+                  points: 25,
+                  title: 'Do your activities',
+                  done: doneStates[2],
+                  onCheck: () {
+                    setState(() {
+                      doneStates[2] = !doneStates[2];
+                    });
+                  },
+                ),
               ],
             ),
           ),
-          HomePointsCard(points: 30, completed: 1, total: 3),
+          const HomePointsCard(), 
         ],
       ),
     );

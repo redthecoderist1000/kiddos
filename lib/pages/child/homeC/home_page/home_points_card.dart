@@ -7,15 +7,15 @@ class HomePointsCard extends StatelessWidget {
 
   const HomePointsCard({
     super.key,
-    required this.points,
-    required this.completed,
-    required this.total,
+    this.points = 10,     
+    this.completed = 1,    
+    this.total = 3,        
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
+      margin: const EdgeInsets.symmetric(vertical: 18, horizontal: 5),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -33,7 +33,7 @@ class HomePointsCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.star, color: Color(0xFFFFC700)), // gold
+              const Icon(Icons.star, color: Color(0xFFFFC700)),
               Text(
                 ' $completed of $total ',
                 style: const TextStyle(
@@ -42,7 +42,7 @@ class HomePointsCard extends StatelessWidget {
                   color: Color(0xFF222222),
                 ),
               ),
-              const Icon(Icons.star, color: Color(0xFFFFC700)), // gold
+              const Icon(Icons.star, color: Color(0xFFFFC700)),
             ],
           ),
           const SizedBox(height: 4),
@@ -55,7 +55,7 @@ class HomePointsCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 18),
             decoration: BoxDecoration(
-              color: Color(0xFFF8F2FF), // very light purple
+              color: Color(0xFFF8F2FF),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(

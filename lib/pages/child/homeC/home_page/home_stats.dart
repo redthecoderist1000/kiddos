@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 
 class HomeStats extends StatelessWidget {
-  const HomeStats({super.key});
+  final int tasksDone;
+  final int pointsEarned;
+
+  const HomeStats({
+    super.key,
+    this.tasksDone = 10, 
+    this.pointsEarned = 20, 
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
-          child: _StatCard(label: 'Tasks Done', value: '1'),
+          child: _StatCard(label: 'Tasks Done', value: '$tasksDone'),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: _StatCard(label: 'Points Earned', value: '30'),
+          child: _StatCard(label: 'Points Earned', value: '$pointsEarned'),
         ),
       ],
     );

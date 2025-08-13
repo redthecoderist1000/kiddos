@@ -79,11 +79,11 @@ class HomeTaskCard extends StatelessWidget {
                           children: [
                             Icon(
                               category == 'cleaning'
-                                  ? Icons.auto_awesome // sparkles icon for cleaning
+                                  ? Icons.auto_awesome 
                                   : category == 'personal'
                                       ? Icons.favorite
                                       : category == 'learning'
-                                          ? Icons.emoji_events // trophy icon for learning
+                                          ? Icons.emoji_events
                                           : Icons.help_outline,
                               size: 14,
                               color: Colors.white,

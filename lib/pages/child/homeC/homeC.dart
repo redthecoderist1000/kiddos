@@ -11,13 +11,13 @@ class HomeC extends StatefulWidget {
 }
 
 class _HomeCState extends State<HomeC> {
-  List<bool> doneStates = [true, false, false]; // Example for 3 cards
+  List<bool> doneStates = [true, false, false, false]; // Added 4th card state
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(20),
-
+      
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -104,10 +104,26 @@ class _HomeCState extends State<HomeC> {
                     });
                   },
                 ),
+                const SizedBox(height: 16),
+                HomeTaskCard(
+                  color: const Color(0xFF76E5FF),
+                  icon: Icons.local_dining,
+                  iconColor: Colors.white,
+                  category: 'helping',
+                  points: 20,
+                  title: 'Do the house chores',
+                  done: doneStates[3],
+                  onCheck: () {
+                    setState(() {
+                      doneStates[3] = !doneStates[3];
+                    });
+                  },
+                ),
               ],
             ),
           ),
-          HomePointsCard(points: 30, completed: 1, total: 3),
+
+          HomePointsCard(points: 30, completed: 1, total: 4),
         ],
       ),
     );

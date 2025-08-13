@@ -52,47 +52,54 @@ class ProfilePState extends State<ProfileP> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.width < 400;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Manage Users',
-          style: TextStyle(
-            fontSize: isSmall ? 24 : 32,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF8B3EFF),
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(20),
+
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Manage Users',
+            style: TextStyle(
+              fontSize: isSmall ? 24 : 32,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF8B3EFF),
+            ),
           ),
-        ),
-        SizedBox(height: isSmall ? 4 : 8),
-        Text(
-          "Manage your Kiddo's family",
-          style: TextStyle(fontSize: isSmall ? 13 : 16, color: Colors.black87),
-        ),
-        SizedBox(height: isSmall ? 16 : 28),
-        AddFamilyButton(
-          onMemberAdded: () async {
-            // TODO: addmember logic;
-          },
-        ),
-        SizedBox(height: isSmall ? 16 : 24),
-        FamilyMemberList(
-          members: members,
-          isSmall: isSmall,
-          onEdit: (index, member) {
-            showDialog(
-              context: context,
-              builder: (context) => EditFamilyMemberDialog(
-                member: member,
-                onSave: (updatedMember) {
-                  _editMember(index, updatedMember);
-                },
-              ),
-            );
-          },
-        ),
-        SizedBox(height: isSmall ? 20 : 32),
-        FamilyCount(isSmall: isSmall),
-      ],
+          SizedBox(height: isSmall ? 4 : 8),
+          Text(
+            "Manage your Kiddo's family",
+            style: TextStyle(
+              fontSize: isSmall ? 13 : 16,
+              color: Colors.black87,
+            ),
+          ),
+          SizedBox(height: isSmall ? 16 : 28),
+          AddFamilyButton(
+            onMemberAdded: () async {
+              // TODO: addmember logic;
+            },
+          ),
+          SizedBox(height: isSmall ? 16 : 24),
+          FamilyMemberList(
+            members: members,
+            isSmall: isSmall,
+            onEdit: (index, member) {
+              showDialog(
+                context: context,
+                builder: (context) => EditFamilyMemberDialog(
+                  member: member,
+                  onSave: (updatedMember) {
+                    _editMember(index, updatedMember);
+                  },
+                ),
+              );
+            },
+          ),
+          SizedBox(height: isSmall ? 20 : 32),
+          FamilyCount(isSmall: isSmall),
+        ],
+      ),
     );
   }
 }

@@ -9,11 +9,7 @@ class ChildScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(padding: const EdgeInsets.all(20.0), child: child),
-        ),
-      ),
+      body: SafeArea(child: child),
       bottomNavigationBar: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(

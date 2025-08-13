@@ -11,23 +11,27 @@ class MeP extends StatefulWidget {
 class _MePState extends State<MeP> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // no need for scaffold
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(20),
 
-        // start coding here...
-        Text('Me Page (parent)'),
-        MaterialButton(
-          onPressed: () {
-            context.push('/settings-parent');
-          },
-          elevation: 0,
-          textColor: Colors.white,
-          color: Colors.deepPurpleAccent,
-          child: Text('go to settings (parent)'),
-        ),
-      ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // no need for scaffold
+
+          // start coding here...
+          Text('Me Page (parent)'),
+          MaterialButton(
+            onPressed: () {
+              context.push('/settings-parent');
+            },
+            elevation: 0,
+            textColor: Colors.white,
+            color: Colors.deepPurpleAccent,
+            child: Text('go to settings (parent)'),
+          ),
+        ],
+      ),
     );
   }
 }

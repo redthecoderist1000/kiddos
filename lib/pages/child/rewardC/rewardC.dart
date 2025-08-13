@@ -10,14 +10,18 @@ class RewardC extends StatefulWidget {
 class _RewardCState extends State<RewardC> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // no need for scaffold
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(20),
 
-        // start coding here...
-        Text('Reawrds Page (child)'),
-      ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // no need for scaffold
+
+          // start coding here...
+          Text('Reawrds Page (child)'),
+        ],
+      ),
     );
   }
 }

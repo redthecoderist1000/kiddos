@@ -10,14 +10,17 @@ class ProgressP extends StatefulWidget {
 class _ProgressPState extends State<ProgressP> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // no need for scaffold
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // no need for scaffold
 
-        // start coding here...
-        Text('Progress Page (parent)'),
-      ],
+          // start coding here...
+          Text('Progress Page (parent)'),
+        ],
+      ),
     );
   }
 }

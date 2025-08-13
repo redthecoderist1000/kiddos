@@ -16,36 +16,35 @@ class _HomeCState extends State<HomeC> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      padding: EdgeInsets.all(20),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header
-          Padding(
-            padding: const EdgeInsets.only(left: 18.0, top: 24.0, right: 18.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Text(
-                      'Hello Lily!',
-                        style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF9810FA),
-                      ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'Hello Lily!',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF9810FA),
                     ),
-                    const SizedBox(width: 8),
-                    const Text('👋', style: TextStyle(fontSize: 28)),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                const Text(
-                  "Here's what's on your schedule today.",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ],
-            ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text('👋', style: TextStyle(fontSize: 28)),
+                ],
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                "Here's what's on your schedule today.",
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ],
           ),
           const SizedBox(height: 24),
 
@@ -108,11 +107,7 @@ class _HomeCState extends State<HomeC> {
               ],
             ),
           ),
-          HomePointsCard(
-            points: 30,
-            completed: 1,
-            total: 3,
-          ),
+          HomePointsCard(points: 30, completed: 1, total: 3),
         ],
       ),
     );

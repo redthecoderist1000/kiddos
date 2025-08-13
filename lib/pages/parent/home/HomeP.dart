@@ -73,74 +73,76 @@ class HomePState extends State<HomeP> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const HomeHeader(),
-        const SizedBox(height: 24),
-        HomeCarousel(
-          currentSlide: _currentSlide,
-          pageController: _pageController,
-          slides: _slides,
-          onPageChanged: (index) {
-            if (mounted) {
-              setState(() {
-                _currentSlide = index;
-              });
-            }
-          },
-        ),
-        const SizedBox(height: 24),
-        const HomeStats(),
-        const SizedBox(height: 24),
-
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  context.push('/create-task');
-                },
-                icon: const Icon(Icons.add, color: Colors.white),
-                label: const Text(
-                  'Create Task',
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const HomeHeader(),
+          const SizedBox(height: 24),
+          HomeCarousel(
+            currentSlide: _currentSlide,
+            pageController: _pageController,
+            slides: _slides,
+            onPageChanged: (index) {
+              if (mounted) {
+                setState(() {
+                  _currentSlide = index;
+                });
+              }
+            },
+          ),
+          const SizedBox(height: 24),
+          const HomeStats(),
+          const SizedBox(height: 24),
+          Row(
+            spacing: 8,
+            children: [
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    context.push('/create-task');
+                  },
+                  icon: const Icon(Icons.add, color: Colors.white),
+                  label: const Text(
+                    'Create Task',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.assignment, color: Colors.white),
-                label: const Text(
-                  'Assign Task',
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.assignment, color: Colors.white),
+                  label: const Text(
+                    'Assign Task',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-        const HomeFamilyPerformance(),
-        const SizedBox(height: 24),
-        const HomeRecentActivity(),
-        const SizedBox(height: 24),
-      ],
+            ],
+          ),
+          const SizedBox(height: 24),
+          const HomeFamilyPerformance(),
+          const SizedBox(height: 24),
+          const HomeRecentActivity(),
+          const SizedBox(height: 24),
+        ],
+      ),
     );
   }
 }

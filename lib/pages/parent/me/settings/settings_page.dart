@@ -13,49 +13,53 @@ class SettingsP extends StatefulWidget {
 class _SettingsPState extends State<SettingsP> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Header
-        const Text(
-          'Settings',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF7A1FA0),
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(20),
+
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header
+          const Text(
+            'Settings',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF7A1FA0),
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        const Text(
-          "Manage your kiddo's account and preferences",
-          style: TextStyle(fontSize: 14, color: Colors.grey),
-        ),
+          const SizedBox(height: 8),
+          const Text(
+            "Manage your kiddo's account and preferences",
+            style: TextStyle(fontSize: 14, color: Colors.grey),
+          ),
 
-        const SizedBox(height: 24),
+          const SizedBox(height: 24),
 
-        // Edit Profile Section
-        _buildSection(
-          icon: Icons.person_outline,
-          title: 'Edit Profile',
-          subtitle: 'Update your personal information and profile picture',
-          child: const EditProfile(),
-        ),
+          // Edit Profile Section
+          _buildSection(
+            icon: Icons.person_outline,
+            title: 'Edit Profile',
+            subtitle: 'Update your personal information and profile picture',
+            child: const EditProfile(),
+          ),
 
-        const SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-        // Change Password Section
-        _buildSection(
-          icon: Icons.lock_outline,
-          title: 'Change Password',
-          subtitle: 'Update your password to keep your account secure',
-          child: const ChangePassword(),
-        ),
+          // Change Password Section
+          _buildSection(
+            icon: Icons.lock_outline,
+            title: 'Change Password',
+            subtitle: 'Update your password to keep your account secure',
+            child: const ChangePassword(),
+          ),
 
-        const SizedBox(height: 20),
+          const SizedBox(height: 20),
 
-        // Delete Account Section
-        const DeleteAccount(),
-      ],
+          // Delete Account Section
+          const DeleteAccount(),
+        ],
+      ),
     );
   }
 

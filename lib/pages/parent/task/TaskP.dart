@@ -10,14 +10,18 @@ class TaskP extends StatefulWidget {
 class _TaskPState extends State<TaskP> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // no need for scaffold
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(20),
 
-        // start coding here...
-        Text('Task Page (parent)'),
-      ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // no need for scaffold
+
+          // start coding here...
+          Text('Task Page (parent)'),
+        ],
+      ),
     );
   }
 }

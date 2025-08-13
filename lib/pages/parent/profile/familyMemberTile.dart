@@ -99,7 +99,7 @@ class FamilyMemberTile extends StatelessWidget {
               ],
             ),
           ),
-          // Edit button triggers the onEdit callback
+
           IconButton(
             icon: Icon(Icons.edit, size: isSmall ? 18 : 22, color: Colors.black54),
             onPressed: onEdit,

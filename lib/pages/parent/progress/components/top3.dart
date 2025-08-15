@@ -10,41 +10,45 @@ class Top3 extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
+    final first = list[0];
+    // final second = ;
+    // final third = ;
+
+    return SizedBox(
       width: double.infinity,
 
       child: Stack(
         children: [
-          Visibility(
-            visible: list.length > 1,
-            child: Positioned(
-              bottom: 0,
-              left: screenWidth * 0.15, // 15% from left
-              child: LeaderBoardIcon(
-                isTop1: false,
-                name: list[1]?['name'],
-                score: list[1]?['score'],
-              ),
-            ),
-          ),
+          // second
+          list.length < 2
+              ? SizedBox()
+              : Positioned(
+                  bottom: 0,
+                  left: screenWidth * 0.15, // 15% from left
+                  child: LeaderBoardIcon(
+                    isTop1: false,
+                    name: list[1]['name'],
+                    score: list[1]['score'],
+                  ),
+                ),
 
-          Visibility(
-            visible: list.length > 2,
-            child: Positioned(
-              bottom: 0,
-              right: screenWidth * 0.15, // 15% from right
-              child: LeaderBoardIcon(
-                isTop1: false,
-                name: list[2]?['name'],
-                score: list[2]?['score'],
-              ),
-            ),
-          ),
+          // third
+          list.length < 3
+              ? SizedBox()
+              : Positioned(
+                  bottom: 0,
+                  right: screenWidth * 0.15, // 15% from right
+                  child: LeaderBoardIcon(
+                    isTop1: false,
+                    name: list[2]['name'],
+                    score: list[2]['score'],
+                  ),
+                ),
           Center(
             child: LeaderBoardIcon(
               isTop1: true,
-              name: list[0]['name'],
-              score: list[0]['score'],
+              name: first['name'],
+              score: first['score'],
             ),
           ),
         ],

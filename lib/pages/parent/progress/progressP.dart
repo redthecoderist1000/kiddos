@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:kiddos/pages/parent/progress/components/leaderboards.dart';
 import 'package:kiddos/pages/parent/progress/components/progressCard.dart';
@@ -14,6 +15,16 @@ class _ProgressPState extends State<ProgressP> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.width < 400;
+
+    List leaderboards = [
+      {'name': '@nabong', 'score': 0},
+      {'name': '@yoopewpew', 'score': 0},
+      {'name': '@momoring', 'score': 0},
+      {'name': '@shashahsa', 'score': 0},
+      {'name': '@zyozyo', 'score': 0},
+      {'name': '@nabong', 'score': 0},
+      {'name': '@yoopewpew', 'score': 0},
+    ];
 
     return SingleChildScrollView(
       padding: EdgeInsets.all(20),
@@ -42,7 +53,21 @@ class _ProgressPState extends State<ProgressP> {
           Leaderboards(),
 
           // carousel
-          ProgressCard(),
+          CarouselSlider(
+            items: List.generate(leaderboards.length, (index) {
+              final item = leaderboards[index];
+
+              return ProgressCard(item: item);
+            }),
+            options: CarouselOptions(
+              autoPlay: false,
+              enlargeCenterPage: true,
+              viewportFraction: 0.85,
+              aspectRatio: 2.0,
+              enableInfiniteScroll: false,
+              height: 600,
+            ),
+          ),
         ],
       ),
     );

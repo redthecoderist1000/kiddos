@@ -8,7 +8,7 @@ class HomeTaskCard extends StatelessWidget {
   final int points;
   final String title;
   final bool done;
-  final VoidCallback? onCheck; // Add this
+  final VoidCallback? onCheck; 
 
   const HomeTaskCard({
     super.key,
@@ -19,7 +19,7 @@ class HomeTaskCard extends StatelessWidget {
     required this.points,
     required this.title,
     required this.done,
-    this.onCheck, // Add this
+    this.onCheck, 
   });
 
   @override
@@ -43,7 +43,7 @@ class HomeTaskCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(18.0),
             child: GestureDetector(
-              onTap: onCheck, // Make check area tappable
+              onTap: onCheck, 
               child: Container(
                 width: 28,
                 height: 28,

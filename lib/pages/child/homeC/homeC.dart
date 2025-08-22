@@ -4,6 +4,7 @@ import '../../../models/task.dart';
 import 'home_page/home_stats.dart';
 import 'home_page/home_task_card.dart';
 import 'home_page/home_points_card.dart';
+import '../taskC/taskC.dart'; 
 
 class HomeC extends StatefulWidget {
   const HomeC({super.key});
@@ -118,15 +119,6 @@ class _HomeCState extends State<HomeC> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 8),
-                                  Text(
-                                    "Your Tasks Today",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF9810FA),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 18),
                                   Container(
                                     width: double.infinity,
                                     padding: EdgeInsets.all(24),
@@ -198,32 +190,66 @@ class _HomeCState extends State<HomeC> {
                                 ],
                               )
                             : Column(
-                                children: List.generate(
-                                  tasks.take(3).length, (index) {
-                                    final task = tasks[index];
-                                    if (doneStates.length != tasks.length) {
-                                      doneStates = List<bool>.filled(tasks.length, false);
-                                    }
-                                    return Column(
-                                      children: [
-                                        HomeTaskCard(
-                                          color: _getCardColor(task.category),
-                                          emoji: _getCardEmoji(task.category),
-                                          category: task.category,
-                                          points: task.points,
-                                          title: task.title,
-                                          done: doneStates[index],
-                                          onCheck: () {
-                                            setState(() {
-                                              doneStates[index] = !doneStates[index];
-                                            });
-                                          },
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Your Tasks Today",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF9810FA),
                                         ),
-                                        const SizedBox(height: 16),
-                                      ],
-                                    );
-                                  },
-                                ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => TaskC(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          "See All",
+                                          style: TextStyle(
+                                            color: Color(0xFF9810FA),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 18),
+                                  ...List.generate(
+                                    tasks.take(3).length, (index) {
+                                      final task = tasks[index];
+                                      if (doneStates.length != tasks.length) {
+                                        doneStates = List<bool>.filled(tasks.length, false);
+                                      }
+                                      return Column(
+                                        children: [
+                                          HomeTaskCard(
+                                            color: _getCardColor(task.category),
+                                            emoji: _getCardEmoji(task.category),
+                                            category: task.category,
+                                            points: task.points,
+                                            title: task.title,
+                                            done: doneStates[index],
+                                            onCheck: () {
+                                              setState(() {
+                                                doneStates[index] = !doneStates[index];
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
               ),
 

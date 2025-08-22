@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart'; 
 import '../../../db/task_database_helper.dart';
 import '../../../models/task.dart';
 import 'home_page/home_stats.dart';
 import 'home_page/home_task_card.dart';
 import 'home_page/home_points_card.dart';
-import '../taskC/taskC.dart'; 
 
 class HomeC extends StatefulWidget {
   const HomeC({super.key});
@@ -205,12 +205,7 @@ class _HomeCState extends State<HomeC> {
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => TaskC(),
-                                            ),
-                                          );
+                                          context.go('/task-child'); // <-- This navigates to the child task page with bottom navigation
                                         },
                                         child: Text(
                                           "See All",

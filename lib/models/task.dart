@@ -28,7 +28,7 @@ class Task {
       'points': points,
       'assignedTo': assignedTo,
       'dueDate': dueDate,
-      'completed': isDone ? 1 : 0, // <-- Add this line
+      'completed': isDone ? 1 : 0, 
     };
   }
 
@@ -41,7 +41,7 @@ class Task {
       points: map['points'],
       assignedTo: map['assignedTo'],
       dueDate: map['dueDate'],
-      isDone: map['completed'] == 1, // <-- Add this line
+      isDone: map['isDone'] == 1, 
     );
   }
 }

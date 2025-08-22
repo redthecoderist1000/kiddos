@@ -6,6 +6,7 @@ class Task {
   final int points;
   final String assignedTo;
   final String dueDate;
+  final bool isDone; 
 
   Task({
     this.id,
@@ -15,6 +16,7 @@ class Task {
     required this.points,
     required this.assignedTo,
     required this.dueDate,
+    this.isDone = false, 
   });
 
   Map<String, dynamic> toMap() {
@@ -26,6 +28,7 @@ class Task {
       'points': points,
       'assignedTo': assignedTo,
       'dueDate': dueDate,
+      'completed': isDone ? 1 : 0, // <-- Add this line
     };
   }
 
@@ -38,6 +41,7 @@ class Task {
       points: map['points'],
       assignedTo: map['assignedTo'],
       dueDate: map['dueDate'],
+      isDone: map['completed'] == 1, // <-- Add this line
     );
   }
 }

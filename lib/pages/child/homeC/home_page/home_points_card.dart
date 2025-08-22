@@ -63,21 +63,33 @@ class HomePointsCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      '$points points earned!',
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFB050FF),
-                      ),
-                    ),
+                    total == 0
+                        ? Text(
+                            'Ready to start! 🎉',
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF9810FA), 
+                            ),
+                          )
+                        : Text(
+                            '$points points earned!',
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFFB050FF),
+                            ),
+                          ),
                     const SizedBox(width: 8),
-                    const Text('🎉', style: TextStyle(fontSize: 22)),
+                    if (total != 0)
+                      const Text('🎉', style: TextStyle(fontSize: 22)),
                   ],
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  'Keep up the great work!',
+                Text(
+                  total == 0
+                      ? 'Your journey begins when tasks are added!'
+                      : 'Keep up the great work!',
                   style: TextStyle(
                     fontSize: 15,
                     color: Color(0xFFB050FF),

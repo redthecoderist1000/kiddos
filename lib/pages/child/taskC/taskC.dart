@@ -45,24 +45,6 @@ class TtaskCState extends State<TaskC> {
             ],
           ),
           const SizedBox(height: 24),
-
-          //Tabs
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: TabBar(
-              indicator: BoxDecoration(
-                color: Colors.redAccent,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.redAccent,
-              tabs: [
-                Tab(child: Row(children: [Text('Need Attention'), SizedBox(width: 4), CircleAvatar(radius: 10, backgroundColor: Colors.white, child: Text('5', style: TextStyle(color: Colors.redAccent, fontSize: 12)))])),
-                Tab(child: Row(children: [Text('Approval'), SizedBox(width: 4), CircleAvatar(radius: 10, backgroundColor: Colors.white, child: Text('4', style: TextStyle(color: Colors.orange, fontSize: 12)))])),
-                Tab(child: Row(children: [Text('Done'), SizedBox(width: 4), CircleAvatar(radius: 10, backgroundColor: Colors.white, child: Text('2', style: TextStyle(color: Colors.green, fontSize: 12)))])),
-              ],
-            ),
-          ),
         ],
       ),
     );

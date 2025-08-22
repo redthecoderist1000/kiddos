@@ -35,7 +35,8 @@ class TaskDatabaseHelper {
         category TEXT,
         points INTEGER,
         assignedTo TEXT,
-        dueDate TEXT
+        dueDate TEXT,
+        completed INTEGER DEFAULT 0
       );
     ''');
   }

@@ -15,7 +15,7 @@ class HomePointsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
+      margin: const EdgeInsets.symmetric(vertical: 18, horizontal: 8),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -35,9 +35,9 @@ class HomePointsCard extends StatelessWidget {
             children: [
               const Icon(Icons.star, color: Color(0xFFFFC700)), // gold
               Text(
-                ' $completed of $total ',
+                '  $completed of $total  ',
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF222222),
                 ),
@@ -53,35 +53,40 @@ class HomePointsCard extends StatelessWidget {
           const SizedBox(height: 18),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 18),
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
             decoration: BoxDecoration(
-              color: Color(0xFFF8F2FF), // very light purple
-              borderRadius: BorderRadius.circular(20),
+              color: Color(0xFFF3E6FF), // soft purple
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '$points points earned!',
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFB050FF),
+                total == 0
+                    ? Text(
+                        'Ready to start! 🎉',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF9810FA),
+                        ),
+                      )
+                    : Text(
+                        '$points points earned!',
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFB050FF),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Text('🎉', style: TextStyle(fontSize: 22)),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'Keep up the great work!',
+                const SizedBox(height: 6),
+                Text(
+                  total == 0
+                      ? 'Your journey begins when tasks are added!'
+                      : 'Keep going! You\'re doing great!',
                   style: TextStyle(
                     fontSize: 15,
-                    color: Color(0xFFB050FF),
+                    color: Color(0xFF9810FA),
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),

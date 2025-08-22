@@ -2,24 +2,22 @@ import 'package:flutter/material.dart';
 
 class HomeTaskCard extends StatelessWidget {
   final Color color;
-  final IconData icon;
-  final Color iconColor;
+  final String emoji;
   final String category;
   final int points;
   final String title;
   final bool done;
-  final VoidCallback? onCheck; // Add this
+  final VoidCallback? onCheck; 
 
   const HomeTaskCard({
     super.key,
     required this.color,
-    required this.icon,
-    required this.iconColor,
+    required this.emoji,
     required this.category,
     required this.points,
     required this.title,
     required this.done,
-    this.onCheck, // Add this
+    this.onCheck, 
   });
 
   @override
@@ -79,12 +77,14 @@ class HomeTaskCard extends StatelessWidget {
                           children: [
                             Icon(
                               category == 'cleaning'
-                                  ? Icons.auto_awesome // sparkles icon for cleaning
+                                  ? Icons.auto_awesome
                                   : category == 'personal'
                                       ? Icons.favorite
                                       : category == 'learning'
-                                          ? Icons.emoji_events // trophy icon for learning
-                                          : Icons.help_outline,
+                                          ? Icons.emoji_events
+                                          : category == 'helping'
+                                              ? Icons.star
+                                              : Icons.help_outline,
                               size: 14,
                               color: Colors.white,
                             ),
@@ -146,7 +146,10 @@ class HomeTaskCard extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(18.0),
-            child: Icon(icon, color: iconColor, size: 32),
+            child: Text(
+              emoji,
+              style: TextStyle(fontSize: 32),
+            ),
           ),
         ],
       ),

@@ -7,6 +7,7 @@ import 'familyPerp.dart';
 import 'homeStat.dart';
 import 'recentAct.dart';
 import 'topHeader.dart';
+import '../createTask/createTask.dart';
 
 class HomeP extends StatefulWidget {
   const HomeP({super.key});
@@ -96,12 +97,14 @@ class HomePState extends State<HomeP> {
           const HomeStats(),
           const SizedBox(height: 24),
           Row(
-            spacing: 8,
             children: [
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    context.push('/create-task');
+                    showDialog(
+                      context: context,
+                      builder: (context) => const CreateTask(),
+                    );
                   },
                   icon: const Icon(Icons.add, color: Colors.white),
                   label: const Text(
@@ -110,23 +113,6 @@ class HomePState extends State<HomeP> {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.assignment, color: Colors.white),
-                  label: const Text(
-                    'Assign Task',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

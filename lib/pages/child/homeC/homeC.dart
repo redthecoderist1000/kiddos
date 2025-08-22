@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../db/task_database_helper.dart';
+import '../../../models/task.dart';
 import 'home_page/home_stats.dart';
 import 'home_page/home_task_card.dart';
 import 'home_page/home_points_card.dart';
@@ -11,13 +13,49 @@ class HomeC extends StatefulWidget {
 }
 
 class _HomeCState extends State<HomeC> {
-  List<bool> doneStates = [true, false, false, false]; // Added 4th card state
+  late Future<List<Task>> _tasks;
+  List<bool> doneStates = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _tasks = TaskDatabaseHelper().getTasks();
+  }
+
+  Color _getCardColor(String category) {
+    switch (category) {
+      case 'cleaning':
+        return const Color(0xFFBF76FF);
+      case 'personal':
+        return const Color(0xFFFB5FB3);
+      case 'learning':
+        return const Color(0xFF4D9FFF);
+      case 'helping':
+        return const Color(0xFF76E5FF);
+      default:
+        return Colors.grey;
+    }
+  }
+
+  String _getCardEmoji(String category) {
+    switch (category) {
+      case 'cleaning':
+        return '🧹';
+      case 'personal':
+        return '🧴';
+      case 'learning':
+        return '📚';
+      case 'helping':
+        return '🤝';
+      default:
+        return '❓';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(20),
-      
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,75 +93,51 @@ class _HomeCState extends State<HomeC> {
           ),
           const SizedBox(height: 24),
 
-          // Task Cards
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              children: [
-                HomeTaskCard(
-                  color: const Color(0xFFBF76FF),
-                  icon: Icons.cleaning_services,
-                  iconColor: Colors.white,
-                  category: 'cleaning',
-                  points: 30,
-                  title: 'Tidy up your room',
-                  done: doneStates[0],
-                  onCheck: () {
-                    setState(() {
-                      doneStates[0] = !doneStates[0];
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                HomeTaskCard(
-                  color: const Color(0xFFFB5FB3),
-                  icon: Icons.medical_services,
-                  iconColor: Colors.white,
-                  category: 'personal',
-                  points: 15,
-                  title: 'Brush your teeth',
-                  done: doneStates[1],
-                  onCheck: () {
-                    setState(() {
-                      doneStates[1] = !doneStates[1];
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                HomeTaskCard(
-                  color: const Color(0xFF4D9FFF),
-                  icon: Icons.menu_book,
-                  iconColor: Colors.white,
-                  category: 'learning',
-                  points: 25,
-                  title: 'Do your homework',
-                  done: doneStates[2],
-                  onCheck: () {
-                    setState(() {
-                      doneStates[2] = !doneStates[2];
-                    });
-                  },
-                ),
-                const SizedBox(height: 16),
-                HomeTaskCard(
-                  color: const Color(0xFF76E5FF),
-                  icon: Icons.local_dining,
-                  iconColor: Colors.white,
-                  category: 'helping',
-                  points: 20,
-                  title: 'Do the house chores',
-                  done: doneStates[3],
-                  onCheck: () {
-                    setState(() {
-                      doneStates[3] = !doneStates[3];
-                    });
-                  },
-                ),
-              ],
+            child: FutureBuilder<List<Task>>(
+              future: _tasks,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                final tasks = snapshot.data ?? [];
+                if (doneStates.length != tasks.length) {
+                  doneStates = List<bool>.filled(tasks.length, false);
+                }
+                return Column(
+                  children: List.generate(
+                    tasks.take(3).length, (index) {
+                      final task = tasks[index];
+                      return Column(
+                        children: [
+                          HomeTaskCard(
+                            color: _getCardColor(task.category),
+                          emoji: _getCardEmoji(task.category),
+                          category: task.category,
+                          points: task.points,
+                          title: task.title,
+                          done: doneStates[index],
+                          onCheck: () {
+                            setState(() {
+                              doneStates[index] = !doneStates[index];
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                      ],
+                    );
+                  }),
+                );
+              },
             ),
           ),
 
-          HomePointsCard(points: 30, completed: 1, total: 4),
+          // Points Card (example, you may want to calculate these)
+          HomePointsCard(points: 30, completed: doneStates.where((d) => d).length, total: doneStates.length),
         ],
       ),
     );

@@ -87,7 +87,7 @@ class _TtaskCState extends State<TaskC> {
         children: [
           // Custom Header
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 40, 20, 16),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

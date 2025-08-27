@@ -164,7 +164,218 @@ class _TtaskCState extends State<TaskC> {
                 }
                 final tasks = snapshot.data ?? [];
                 if (tasks.isEmpty) {
-                  return const Center(child: Text('No tasks yet!'));
+                  if (selectedTab == 0) {
+                    // Ready tab empty state
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Center(
+                        child: Container(
+                          width: 320,
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFEAF2FF), Color(0xFFF8EFFF)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 12,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.track_changes, color: Color(0xFF9810FA), size: 48),
+                              const SizedBox(height: 12),
+                              const Text(
+                                'Ready to Start!',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF22223B),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                "Your parents haven't added any tasks yet, but they will soon! Get ready for some fun activities.",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Color(0xFF6B7280),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 18),
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 8,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: const [
+                                    Icon(Icons.star, color: Color(0xFFFFC700), size: 32),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      "Tasks will appear here when your parents add them!",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Color(0xFF6B7280),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  } else if (selectedTab == 1) {
+                    // Approval tab empty state
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Center(
+                        child: Container(
+                          width: 320,
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFFF6E7), Color(0xFFFFF0E7)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 12,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.access_alarm, color: Color(0xFFB97A1A), size: 48),
+                              const SizedBox(height: 12),
+                              const Text(
+                                'Nothing waiting!',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF22223B),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                "Complete some tasks and they'll show up here waiting for approval from your parents!",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Color(0xFF6B7280),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Done tab empty state
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Center(
+                        child: Container(
+                          width: 320,
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFE7FFF6), Color(0xFFE7F3FF)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 12,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.emoji_events, color: Color(0xFF1BAA4A), size: 48),
+                              const SizedBox(height: 12),
+                              const Text(
+                                'Ready for Success!',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF22223B),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                "Your completed tasks and earned points will show up here. Start completing tasks to see your achievements!",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Color(0xFF6B7280),
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 18),
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 8,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: const [
+                                    Icon(Icons.celebration, color: Color(0xFF9810FA), size: 32),
+                                    SizedBox(height: 8),
+                                    Text(
+                                      "Every completed task is a step toward earning points and rewards!",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Color(0xFF6B7280),
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
                 }
 
                 List<Task> filteredTasks;

@@ -28,7 +28,7 @@ class _ParentScaffoldState extends State<ParentScaffold> {
                 offset: const Offset(5.0, 5.0),
                 blurRadius: 10.0,
                 spreadRadius: 2.0,
-              ), //BoxShadow
+              ),
               BoxShadow(
                 color: Colors.white,
                 offset: const Offset(0.0, 0.0),
@@ -61,10 +61,17 @@ class _ParentScaffoldState extends State<ParentScaffold> {
                 label: 'Progess',
               ),
               BottomNavigationBarItem(
+                icon: Icon(Icons.emoji_events_rounded),
+                label: 'Reward',
+              ),
+              BottomNavigationBarItem(
                 icon: Icon(Icons.family_restroom_rounded),
                 label: 'Profiles',
               ),
-              BottomNavigationBarItem(icon: Icon(Icons.face), label: 'Me'),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.face),
+                label: 'Me',
+              ),
             ],
           ),
         ),

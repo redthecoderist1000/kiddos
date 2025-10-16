@@ -16,6 +16,7 @@ import 'package:kiddos/pages/parent/me/settings/settings_page.dart';
 import 'package:kiddos/pages/parent/parentScaffold.dart';
 import 'package:kiddos/pages/parent/profile/profileP.dart';
 import 'package:kiddos/pages/parent/progress/progressP.dart';
+import 'package:kiddos/pages/parent/rewardPage/reward.dart';
 import 'package:kiddos/pages/parent/task/TaskP.dart';
 
 GoRouter router = GoRouter(
@@ -78,6 +79,14 @@ GoRouter router = GoRouter(
             GoRoute(
               path: '/progress-parent',
               builder: (context, state) => const ProgressP(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/reward-parent',
+              builder: (context, state) => const RewardPage(),
             ),
           ],
         ),

@@ -1,134 +1,64 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:go_router/go_router.dart';
+import 'package:kiddos/components/Button.dart';
+import 'package:kiddos/components/Header.dart';
+import 'package:kiddos/pages/parent/home/component/homeTop.dart';
+import 'package:kiddos/pages/parent/home/component/kidsAct/kidsAct.dart';
+import 'package:kiddos/pages/parent/home/component/recentAct/recentAct.dart';
+import 'package:kiddos/pages/parent/home/component/triBox.dart';
+import 'addTaskModal.dart';
 
-import 'carouselP.dart';
-import 'familyPerp.dart';
-import 'homeStat.dart';
-import 'recentAct.dart';
-import 'topHeader.dart';
-import '../createTask/createTask.dart';
-
-class HomeP extends StatefulWidget {
-  const HomeP({super.key});
-
-  @override
-  State<HomeP> createState() => HomePState();
-}
-
-class HomePState extends State<HomeP> {
-  int _currentSlide = 0;
-  Timer? _timer;
-  final PageController _pageController = PageController();
-
-  final List<Map<String, String>> _slides = [
-    {
-      'title': 'Monitor Family Progress',
-      'subtitle':
-          'Track your children\'s task completion and celebrate their achievement in real-time.',
-    },
-    {
-      'title': 'Create & Assign Tasks',
-      'subtitle':
-          'Easily create new tasks and assign them to family members with just a few taps.',
-    },
-    {
-      'title': 'Reward System',
-      'subtitle':
-          'Motivate your children with points and rewards for completing their daily tasks.',
-    },
-    {
-      'title': 'Family Analytics',
-      'subtitle':
-          'View detailed insights about your family\'s productivity and task completion rates.',
-    },
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _startAutoSlide();
-    });
-  }
-
-  void _startAutoSlide() {
-    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
-      if (mounted && _pageController.hasClients) {
-        final nextSlide = (_currentSlide + 1) % _slides.length;
-        _pageController.animateToPage(
-          nextSlide,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    _pageController.dispose();
-    super.dispose();
-  }
+class HomeP extends StatelessWidget {
+  const HomeP({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const HomeHeader(),
-          const SizedBox(height: 24),
-          HomeCarousel(
-            currentSlide: _currentSlide,
-            pageController: _pageController,
-            slides: _slides,
-            onPageChanged: (index) {
-              if (mounted) {
-                setState(() {
-                  _currentSlide = index;
-                });
-              }
-            },
-          ),
-          const SizedBox(height: 24),
-          const HomeStats(),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              Expanded(
-                child: ElevatedButton.icon(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Header(
+              title: 'Hello, Parent!',
+              subtitle: 'Here\'s how your kids are doing today.',
+              imagePath: 'assets/wave.png',
+            ),
+            const HomeTop(),
+            const TriBox(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: CustomButton(
+                  icon: Icons.add,
+                  text: 'Add Task',
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => const CreateTask(),
-                    );
+                    _showAddTaskModal(context);
                   },
-                  icon: const Icon(Icons.add, color: Colors.white),
-                  label: const Text(
-                    'Create Task',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          const HomeFamilyPerformance(),
-          const SizedBox(height: 24),
-          const HomeRecentActivity(),
-          const SizedBox(height: 24),
-        ],
+            ),
+            const KidsAct(),
+            const RecentAct(),
+          ],
+        ),
       ),
+    );
+  }
+
+  void _showAddTaskModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AddTaskModal(
+          onTaskAdded: (newTask) {
+            // Handle the new task here
+            // You can add it to a state management solution or pass it up to parent
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Task created successfully!')),
+            );
+            print('New task created: $newTask');
+          },
+        );
+      },
     );
   }
 }

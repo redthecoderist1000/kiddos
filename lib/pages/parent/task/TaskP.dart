@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kiddos/components/Button.dart';
+import 'component/taskPageLeadP.dart';
+import 'component/tabTaskP.dart';
+import 'component/taskTileP.dart';
+import '../home/addTaskModal.dart';
 
 class TaskP extends StatelessWidget {
   const TaskP({super.key});
@@ -23,10 +28,7 @@ class TaskP extends StatelessWidget {
               const SizedBox(height: 4),
               const Text(
                 "Feel the nostalgia with the tasks you’ve accomplished so far!",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.black87,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.black87),
               ),
               const SizedBox(height: 20),
 
@@ -203,18 +205,14 @@ class TaskItem extends StatelessWidget {
             children: [
               const Text(
                 "Category",
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.black54,
-                ),
+                style: TextStyle(fontSize: 10, color: Colors.black54),
               ),
               Container(
                 decoration: BoxDecoration(
                   color: categoryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Text(
                   category,
                   style: TextStyle(
@@ -230,4 +228,22 @@ class TaskItem extends StatelessWidget {
       ),
     );
   }
+
+  //  void _showAddTaskModal() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AddTaskModal(
+  //         onTaskAdded: (newTask) {
+  //           // Handle the new task here
+  //           ScaffoldMessenger.of(context).showSnackBar(
+  //             const SnackBar(content: Text('Task created successfully!')),
+  //           );
+  //           print('New task created: $newTask');
+  //           // You can add the task to your task list here
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 }

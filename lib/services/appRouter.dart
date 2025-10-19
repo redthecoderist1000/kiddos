@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kiddos/components/auth/AuthNotifier.dart';
 import 'package:kiddos/components/auth/AuthService.dart';
-import 'package:kiddos/components/provider/KiddosProvider.dart';
 import 'package:kiddos/main.dart';
 import 'package:kiddos/pages/auth/authPage.dart';
-import 'package:kiddos/pages/auth/login.dart';
 import 'package:kiddos/pages/auth/otpPage.dart';
 import 'package:kiddos/pages/auth/register.dart';
 import 'package:kiddos/pages/child/childScaffold.dart';
@@ -14,14 +11,12 @@ import 'package:kiddos/pages/child/rewardC/rewardC.dart';
 import 'package:kiddos/pages/child/taskC/taskC.dart';
 import 'package:kiddos/pages/parent/createTask/createTask.dart';
 import 'package:kiddos/pages/parent/home/HomeP.dart';
-import 'package:kiddos/pages/parent/me/me.dart';
 import 'package:kiddos/pages/parent/me/settings/settings_page.dart';
 import 'package:kiddos/pages/parent/parentScaffold.dart';
 import 'package:kiddos/pages/parent/profile/profileP.dart';
 import 'package:kiddos/pages/parent/progress/progressP.dart';
 import 'package:kiddos/pages/parent/rewardPage/reward.dart';
 import 'package:kiddos/pages/parent/task/TaskP.dart';
-import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 GoRouter router = GoRouter(

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kiddos/components/Snackbar.dart';
+import 'package:kiddos/components/auth/AuthService.dart';
+import 'package:kiddos/pages/parent/me/settings/qr_code.dart';
 import 'edit_account.dart';
 import 'change_password.dart';
 import 'delete_account.dart';
@@ -46,12 +50,12 @@ class _SettingsPState extends State<SettingsP> {
 
           const SizedBox(height: 20),
 
-          // Change Password Section
+          // // Change Password Section
           _buildSection(
-            icon: Icons.lock_outline,
-            title: 'Change Password',
-            subtitle: 'Update your password to keep your account secure',
-            child: const ChangePassword(),
+            icon: Icons.rocket_launch_rounded,
+            title: 'Add Child Account',
+            subtitle: 'Your parent must scan this QR code to link your account',
+            child: const ChildQR(),
           ),
 
           const SizedBox(height: 20),

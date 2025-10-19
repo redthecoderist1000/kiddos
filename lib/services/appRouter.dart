@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kiddos/components/auth/AuthNotifier.dart';
+import 'package:kiddos/components/auth/AuthService.dart';
+import 'package:kiddos/components/provider/KiddosProvider.dart';
 import 'package:kiddos/main.dart';
 import 'package:kiddos/pages/auth/authPage.dart';
 import 'package:kiddos/pages/auth/login.dart';
@@ -18,21 +21,46 @@ import 'package:kiddos/pages/parent/profile/profileP.dart';
 import 'package:kiddos/pages/parent/progress/progressP.dart';
 import 'package:kiddos/pages/parent/rewardPage/reward.dart';
 import 'package:kiddos/pages/parent/task/TaskP.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 GoRouter router = GoRouter(
-  navigatorKey: navigatorKey,
   initialLocation: '/auth',
+  navigatorKey: navigatorKey,
   routes: [
     GoRoute(
       path: '/auth',
-      builder: (BuildContext context, GoRouterState state) {
-        return const AuthPage();
+      // builder: (BuildContext context, GoRouterState state) {
+      //   return const AuthPage();
+      // },
+      redirect: (context, state) async {
+        final SupabaseClient supabase = Supabase.instance.client;
+        final AuthService authService = AuthService();
+
+        if (supabase.auth.currentSession == null) {
+          return '/login'; // di pa naka login
+        }
+        // get user role
+        final userdetails = await supabase
+            .from('vw_owninfo')
+            .select()
+            .maybeSingle();
+
+        authService.userDetails(context);
+
+        if (userdetails == null) {
+          // print('User details not found for current user.');
+          return '/register'; // user details not found, redirect to setup
+        } else if (userdetails['role'] == 'Parent') {
+          return '/home-parent'; // parent home page
+        }
+        return '/home-child';
       },
     ),
     GoRoute(
       path: '/login',
       builder: (BuildContext context, GoRouterState state) {
-        return const Login();
+        return const AuthPage();
       },
     ),
     GoRoute(
@@ -100,10 +128,10 @@ GoRouter router = GoRouter(
         ),
         StatefulShellBranch(
           routes: [
-            GoRoute(
-              path: '/me-parent',
-              builder: (context, state) => const MeP(),
-            ),
+            // GoRoute(
+            //   path: '/me-parent',
+            //   builder: (context, state) => const MeP(),
+            // ),
             GoRoute(
               path: '/settings-parent',
               builder: (context, state) => const SettingsP(),
@@ -139,6 +167,14 @@ GoRouter router = GoRouter(
             GoRoute(
               path: '/reward-child',
               builder: (context, state) => const RewardC(),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: '/settings-child',
+              builder: (context, state) => const SettingsP(),
             ),
           ],
         ),

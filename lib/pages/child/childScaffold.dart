@@ -52,6 +52,7 @@ class ChildScaffold extends StatelessWidget {
               icon: Icon(Icons.card_giftcard_rounded),
               label: 'Rewards',
             ),
+            BottomNavigationBarItem(icon: Icon(Icons.face), label: 'Me'),
           ],
         ),
       ),

@@ -1,17 +1,49 @@
 import 'package:flutter/material.dart';
-import 'FamilyMemberTile.dart';
+import 'package:kiddos/pages/parent/profile/familyMemberTile.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class FamilyMemberList extends StatelessWidget {
-  final List<Map<String, dynamic>> members;
+class FamilyMemberList extends StatefulWidget {
   final bool isSmall;
-  final void Function(int index, Map<String, dynamic> member) onEdit;
 
-  const FamilyMemberList({
-    required this.members,
-    required this.isSmall,
-    required this.onEdit,
-    super.key,
-  });
+  const FamilyMemberList({required this.isSmall, super.key});
+
+  @override
+  State<FamilyMemberList> createState() => _FamilyMemberListState();
+}
+
+class _FamilyMemberListState extends State<FamilyMemberList> {
+  final supabase = Supabase.instance.client;
+  final childChannel = Supabase.instance.client.channel('public:tbl_user');
+  Future<dynamic> fetchChildren() async {
+    try {
+      final res = await supabase.from('vw_getchild').select('*');
+
+      return res;
+    } catch (e) {
+      throw Exception('Failed to load children');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    childChannel.onPostgresChanges(
+      event: PostgresChangeEvent.all,
+      schema: 'public',
+      table: 'tbl_user',
+      callback: (payload) => {
+        print('Change received in tbl_user: $payload'),
+        setState(() {}),
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    supabase.removeChannel(childChannel);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,50 +51,121 @@ class FamilyMemberList extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(isSmall ? 10 : 16),
+        borderRadius: BorderRadius.circular(widget.isSmall ? 10 : 16),
         border: Border.all(color: Colors.grey.shade300),
       ),
-      padding: EdgeInsets.all(isSmall ? 10 : 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.groups, color: Colors.black87, size: isSmall ? 18 : 24),
-              SizedBox(width: isSmall ? 4 : 8),
-              Text(
-                'Family Members (${members.length})',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: isSmall ? 13 : 16,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: isSmall ? 2 : 4),
-          Text(
-            'Tap the edit icon to update member details',
-            style: TextStyle(fontSize: isSmall ? 10 : 12, color: Colors.black54),
-          ),
-          SizedBox(height: isSmall ? 8 : 16),
-          ...List.generate(members.length, (index) {
-            final member = members[index];
-            return Padding(
-              padding: EdgeInsets.only(bottom: index == members.length - 1 ? 0 : (isSmall ? 8 : 12)),
-              child: FamilyMemberTile(
-                initial: member['initial'],
-                name: member['name'],
-                email: member['email'],
-                role: member['role'],
-                roleColor: member['roleColor'],
-                roleLabel: member['roleLabel'],
-                roleLabelColor: member['roleLabelColor'],
-                onEdit: () => onEdit(index, member),
-                isSmall: isSmall,
+      padding: EdgeInsets.all(widget.isSmall ? 10 : 16),
+      child: FutureBuilder(
+        future: fetchChildren(),
+        builder: (context, asyncSnapshot) {
+          // if loading
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          // if error
+          if (asyncSnapshot.hasError) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 10,
+                children: [
+                  Text(
+                    '${asyncSnapshot.error}',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: widget.isSmall ? 12 : 14,
+                    ),
+                  ),
+                  // refresh button
+                  MaterialButton(
+                    elevation: 0,
+                    onPressed: () => setState(() {}),
+                    child: Text(
+                      'Retry',
+                      style: TextStyle(fontSize: widget.isSmall ? 12 : 14),
+                    ),
+                  ),
+                ],
               ),
             );
-          }),
-        ],
+          }
+
+          if (!asyncSnapshot.hasData) {
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 10,
+                children: [
+                  Text(
+                    'No linked child accounts found.',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: widget.isSmall ? 12 : 14,
+                    ),
+                  ),
+                  MaterialButton(
+                    elevation: 0,
+                    onPressed: () => setState(() {}),
+                    child: Text(
+                      'Retry',
+                      style: TextStyle(fontSize: widget.isSmall ? 12 : 14),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          final members = asyncSnapshot.data;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.groups,
+                    color: Colors.black87,
+                    size: widget.isSmall ? 18 : 24,
+                  ),
+                  SizedBox(width: widget.isSmall ? 4 : 8),
+                  Text(
+                    'Child Accounts (${members.length})',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: widget.isSmall ? 13 : 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: widget.isSmall ? 2 : 4),
+              Text(
+                'View child accounts linked to your profile.',
+                style: TextStyle(
+                  fontSize: widget.isSmall ? 10 : 12,
+                  color: Colors.black54,
+                ),
+              ),
+              SizedBox(height: widget.isSmall ? 8 : 16),
+              ...List.generate(members.length, (index) {
+                final member = members[index];
+                return Padding(
+                  padding: EdgeInsets.only(
+                    bottom: index == members.length - 1
+                        ? 0
+                        : (widget.isSmall ? 8 : 12),
+                  ),
+                  child: FamilyMemberTile(
+                    name: member['user_name'],
+                    email: member['email'],
+                    isSmall: widget.isSmall,
+                  ),
+                );
+              }),
+            ],
+          );
+        },
       ),
     );
   }

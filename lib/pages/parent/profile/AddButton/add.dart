@@ -1,108 +1,86 @@
 import 'package:flutter/material.dart';
-import 'AddEmail.dart';
-import 'AddCode.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kiddos/components/Snackbar.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AddFamilyButton extends StatelessWidget {
-  final VoidCallback onMemberAdded;
-
-  const AddFamilyButton({super.key, required this.onMemberAdded});
-
-void _showAddOptions(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: true,
-    builder: (context) => Align(
-      alignment: Alignment.center, // <-- Center the popup
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Material(
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: SafeArea(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Add Family Member',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  SizedBox(height: 3),
-                  Text(
-                    "Choose how you'd like to add a family member",
-                    style: TextStyle(fontSize: 13, color: Colors.black54),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 15),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      icon: Icon(Icons.email),
-                      label: Text('Add via Email'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF8B3EFF),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        showDialog(
-                          context: context,
-                          builder: (context) => AddFamilyDialog(onMemberAdded: onMemberAdded),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 3),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      icon: Icon(Icons.qr_code),
-                      label: Text('Add via Code'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: Color(0xFF8B3EFF),
-                        side: BorderSide(color: Color(0xFF8B3EFF)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        showDialog(
-                          context: context,
-                          builder: (context) => GenerateInviteCodeWidget(),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
-}
+  const AddFamilyButton({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final supabase = Supabase.instance.client;
+
+    detectQr(BarcodeCapture barcode) async {
+      // Handle QR code detection logic here
+      final childId = barcode.barcodes.first.rawValue;
+
+      try {
+        await supabase
+            .from('tbl_user')
+            .update({'parent_id': supabase.auth.currentUser!.id})
+            .eq('id', childId!);
+
+        context.pop();
+        setSnackBar(
+          'Your child account is linked successfully!',
+          context,
+          Colors.green,
+        );
+      } catch (e) {
+        context.pop();
+        setSnackBar(
+          'Failed to link child account. Please try again.',
+          context,
+          Colors.red,
+        );
+      }
+    }
+
+    scanQr(BuildContext context) async {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Scan QR Code'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: MobileScanner(
+                    onDetect: detectQr,
+                    scanWindow: Rect.fromLTWH(0, 0, 300, 300),
+                    errorBuilder: (context, error) {
+                      return Center(
+                        child: Text('Error occurred while scanning QR code'),
+                      );
+                    },
+                  ),
+                ),
+
+                Text('QR Code scanning functionality goes here.'),
+              ],
+            ),
+            actions: [
+              TextButton(onPressed: () => context.pop(), child: Text('Close')),
+            ],
+          );
+        },
+      );
+    }
+
     return SizedBox(
       width: double.infinity,
       height: 48,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFBFA2F7),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          backgroundColor: Color.fromARGB(255, 77, 27, 175),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           elevation: 0,
         ),
-        onPressed: () => _showAddOptions(context),
+        onPressed: () => scanQr(context),
         icon: Icon(Icons.group_add, color: Colors.white),
         label: Text(
           'Add Family Member',

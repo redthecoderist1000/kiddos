@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kiddos/components/Button.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'rewardListTile.dart';
 import 'addRewardModal.dart';
 
@@ -11,15 +12,16 @@ class RewardList extends StatefulWidget {
 }
 
 class _RewardListState extends State<RewardList> {
+  final supabase = Supabase.instance.client;
   String selectedCategory = 'All';
-  
+
   final List<String> categories = [
     'All',
     'Privileges',
-    'Toys', 
+    'Toys',
     'Treats',
     'Activities',
-    'Others'
+    'Others',
   ];
 
   final List<Map<String, dynamic>> allRewards = [
@@ -65,83 +67,139 @@ class _RewardListState extends State<RewardList> {
     if (selectedCategory == 'All') {
       return allRewards;
     }
-    return allRewards.where((reward) => reward['category'] == selectedCategory).toList();
+    return allRewards
+        .where((reward) => reward['category'] == selectedCategory)
+        .toList();
+  }
+
+  Future<dynamic> loadRewards() async {
+    // Simulate a network call
+    try {
+      var query = supabase.from('vw_rewardlistp').select('*');
+
+      if (selectedCategory != 'All') {
+        query = query.eq('category', selectedCategory);
+      }
+
+      final res = await query.order('points', ascending: false);
+
+      return res;
+    } catch (e) {
+      throw 'Error loading rewards: $e';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Create New Reward Button
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: CustomButton(
-                text: 'Create New Reward',
-                icon: Icons.add,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                iconColor: Colors.white,
-                onPressed: () {
-                  _showCreateRewardModal();
-                },
-              ),
-            ),
-          ),
-          
-          // Category Filter
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            height: 50,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-                final isSelected = selectedCategory == category;
-                
-                return Container(
-                  margin: const EdgeInsets.only(right: 12.0),
-                  child: FilterChip(
-                    label: Text(
-                      category,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.grey.shade700,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      ),
-                    ),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      setState(() {
-                        selectedCategory = category;
-                      });
-                    },
-                    selectedColor: Colors.blue,
-                    backgroundColor: Colors.grey.shade200,
-                    checkmarkColor: Colors.white,
-                    elevation: isSelected ? 2 : 0,
-                  ),
-                );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Create New Reward Button
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: CustomButton(
+              text: 'Create New Reward',
+              icon: Icons.add,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              iconColor: Colors.white,
+              onPressed: () {
+                _showCreateRewardModal();
               },
             ),
           ),
-          
-          const SizedBox(height: 8),
-          
-          // Reward List - Now properly scrollable
-          ...filteredRewards.map((reward) => RewardListTile(
-            category: reward['category'].toString().toLowerCase(),
-            points: reward['points'] as int,
-            title: reward['title'] as String,
-            description: reward['description'] as String,
-            backgroundColor: _getCategoryColor(reward['category'] as String),
-            icon: _getCategoryIcon(reward['category'] as String),
-          )).toList(),
-        ],
-      ),
+        ),
+
+        // Category Filter
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          height: 50,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              final category = categories[index];
+              final isSelected = selectedCategory == category;
+
+              return Container(
+                margin: const EdgeInsets.only(right: 12.0),
+                child: FilterChip(
+                  label: Text(
+                    category,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.grey.shade700,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
+                  ),
+                  selected: isSelected,
+                  onSelected: (selected) {
+                    setState(() {
+                      selectedCategory = category;
+                    });
+                  },
+                  selectedColor: Colors.blue,
+                  backgroundColor: Colors.grey.shade200,
+                  checkmarkColor: Colors.white,
+                  elevation: isSelected ? 2 : 0,
+                ),
+              );
+            },
+          ),
+        ),
+
+        const SizedBox(height: 8),
+
+        FutureBuilder(
+          future: loadRewards(),
+          builder: (context, asyncSnapshot) {
+            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (asyncSnapshot.hasError) {
+              return Center(child: Text('${asyncSnapshot.error}'));
+            }
+
+            final rewards = asyncSnapshot.data;
+
+            // No rewards available
+            if (rewards == null || (rewards as List).isEmpty) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    'No rewards available in this category.',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              );
+            }
+
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: rewards.length,
+              itemBuilder: (context, index) {
+                final reward = rewards[index];
+                return RewardListTile(
+                  category: reward['category'].toString().toLowerCase(),
+                  points: reward['points'] as int,
+                  title: reward['title'] as String,
+                  description: reward['description'] ?? '',
+                  backgroundColor: _getCategoryColor(
+                    reward['category'] as String,
+                  ),
+                  icon: _getCategoryIcon(reward['category'] as String),
+                );
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -154,9 +212,6 @@ class _RewardListState extends State<RewardList> {
             setState(() {
               allRewards.add(newReward);
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Reward created successfully!')),
-            );
           },
         );
       },

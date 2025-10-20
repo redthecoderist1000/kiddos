@@ -11,7 +11,8 @@ class RewardPage extends StatefulWidget {
   State<RewardPage> createState() => _RewardPageState();
 }
 
-class _RewardPageState extends State<RewardPage> with SingleTickerProviderStateMixin {
+class _RewardPageState extends State<RewardPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int selectedIndex = 0;
 
@@ -39,40 +40,50 @@ class _RewardPageState extends State<RewardPage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    double horizontalPadding = width < 400 ? 12 : width < 600 ? 18 : 22;
-    double verticalPadding = width < 400 ? 6 : width < 600 ? 8 : 10;
-    double fontSize = width < 400 ? 12 : width < 600 ? 13 : 15;
+    double horizontalPadding = width < 400
+        ? 12
+        : width < 600
+        ? 18
+        : 22;
+    double verticalPadding = width < 400
+        ? 6
+        : width < 600
+        ? 8
+        : 10;
+    double fontSize = width < 400
+        ? 12
+        : width < 600
+        ? 13
+        : 15;
     double borderRadius = width < 400 ? 8 : 12;
 
     final tabData = [
-      {
-        'label': 'Reward List',
-        'color': const Color(0xFF2972FE),
-      },
-      {
-        'label': 'Pending',
-        'color': const Color(0xFFFF5E3A),
-      },
-      {
-        'label': 'History',
-        'color': const Color(0xFF16C98D),
-      },
+      {'label': 'Reward List', 'color': const Color(0xFF2972FE)},
+      {'label': 'Pending', 'color': const Color(0xFFFF5E3A)},
+      {'label': 'History', 'color': const Color(0xFF16C98D)},
     ];
 
-    return Scaffold(
-      body: SingleChildScrollView(
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           children: [
             const Header(
-              title: 'Rewards', 
+              title: 'Rewards',
               subtitle: 'Create rewards your kids can earn with points',
               imagePath: 'assets/gift.png',
             ),
-            
+
             // Custom Tab Bar - using tabTaskP design
             Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 child: SizedBox(
                   width: double.infinity,
                   child: Row(
@@ -81,7 +92,9 @@ class _RewardPageState extends State<RewardPage> with SingleTickerProviderStateM
                       final isSelected = selectedIndex == index;
                       return Expanded(
                         child: Padding(
-                          padding: EdgeInsets.only(right: index < tabData.length - 1 ? 8 : 0),
+                          padding: EdgeInsets.only(
+                            right: index < tabData.length - 1 ? 8 : 0,
+                          ),
                           child: GestureDetector(
                             onTap: () => _onTabSelected(index),
                             child: Container(
@@ -90,20 +103,29 @@ class _RewardPageState extends State<RewardPage> with SingleTickerProviderStateM
                                 vertical: verticalPadding,
                               ),
                               decoration: BoxDecoration(
-                                color: isSelected ? tabData[index]['color'] as Color : Colors.white,
-                                borderRadius: BorderRadius.circular(borderRadius),
-                                boxShadow: isSelected
-                                    ? [const BoxShadow(color: Colors.black12, blurRadius: 2)]
-                                    : [],
-                                border: Border.all(
-                                  color: Colors.transparent,
+                                color: isSelected
+                                    ? tabData[index]['color'] as Color
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  borderRadius,
                                 ),
+                                boxShadow: isSelected
+                                    ? [
+                                        const BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 2,
+                                        ),
+                                      ]
+                                    : [],
+                                border: Border.all(color: Colors.transparent),
                               ),
                               alignment: Alignment.center,
                               child: Text(
                                 tabData[index]['label'] as String,
                                 style: TextStyle(
-                                  color: isSelected ? Colors.white : Colors.black87,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : Colors.black87,
                                   fontWeight: FontWeight.w500,
                                   fontSize: fontSize,
                                 ),
@@ -117,7 +139,7 @@ class _RewardPageState extends State<RewardPage> with SingleTickerProviderStateM
                 ),
               ),
             ),
-            
+
             // Tab Views - Fixed height container
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.8,

@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
 
 class FamilyMemberTile extends StatelessWidget {
-  final String initial;
   final String name;
   final String email;
-  final String role;
-  final Color roleColor;
-  final String roleLabel;
-  final Color roleLabelColor;
-  final VoidCallback onEdit;
   final bool isSmall;
 
   const FamilyMemberTile({
-    required this.initial,
+    super.key,
     required this.name,
     required this.email,
-    required this.role,
-    required this.roleColor,
-    required this.roleLabel,
-    required this.roleLabelColor,
-    required this.onEdit,
     required this.isSmall,
   });
 
@@ -41,7 +30,7 @@ class FamilyMemberTile extends StatelessWidget {
             radius: isSmall ? 16 : 22,
             backgroundColor: Colors.grey.shade200,
             child: Text(
-              initial,
+              name.isNotEmpty ? name[0] : '',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: isSmall ? 14 : 20,
@@ -67,24 +56,24 @@ class FamilyMemberTile extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: isSmall ? 4 : 8),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isSmall ? 6 : 8,
-                        vertical: isSmall ? 1 : 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: roleColor,
-                        borderRadius: BorderRadius.circular(isSmall ? 6 : 8),
-                      ),
-                      child: Text(
-                        roleLabel,
-                        style: TextStyle(
-                          color: roleLabelColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: isSmall ? 10 : 12,
-                        ),
-                      ),
-                    ),
+                    // Container(
+                    //   padding: EdgeInsets.symmetric(
+                    //     horizontal: isSmall ? 6 : 8,
+                    //     vertical: isSmall ? 1 : 2,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     color: roleColor,
+                    //     borderRadius: BorderRadius.circular(isSmall ? 6 : 8),
+                    //   ),
+                    //   child: Text(
+                    //     roleLabel,
+                    //     style: TextStyle(
+                    //       color: roleLabelColor,
+                    //       fontWeight: FontWeight.w600,
+                    //       fontSize: isSmall ? 10 : 12,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 SizedBox(height: isSmall ? 1 : 2),
@@ -98,14 +87,6 @@ class FamilyMemberTile extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-
-          IconButton(
-            icon: Icon(Icons.edit, size: isSmall ? 18 : 22, color: Colors.black54),
-            onPressed: onEdit,
-            padding: EdgeInsets.zero,
-            constraints: BoxConstraints(),
-            tooltip: 'Edit',
           ),
         ],
       ),

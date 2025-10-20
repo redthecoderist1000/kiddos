@@ -14,7 +14,11 @@ class AuthService {
     String role,
   ) async {
     await supabase.auth.signUp(email: email, password: password);
-    await supabase.from('tbl_user').insert({'user_name': uname, 'role': role});
+    await supabase.from('tbl_user').insert({
+      'user_name': uname,
+      'role': role,
+      'email': email,
+    });
     await userDetails(context);
   }
 

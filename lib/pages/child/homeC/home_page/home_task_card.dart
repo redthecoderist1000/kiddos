@@ -7,7 +7,6 @@ class HomeTaskCard extends StatelessWidget {
   final int points;
   final String title;
   final bool done;
-  final VoidCallback? onCheck; 
 
   const HomeTaskCard({
     super.key,
@@ -17,13 +16,13 @@ class HomeTaskCard extends StatelessWidget {
     required this.points,
     required this.title,
     required this.done,
-    this.onCheck, 
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 4),
+      padding: const EdgeInsets.all(16),
       height: 110,
       decoration: BoxDecoration(
         color: color,
@@ -37,120 +36,97 @@ class HomeTaskCard extends StatelessWidget {
         ],
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: GestureDetector(
-              onTap: onCheck, // Make check area tappable
-              child: Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: done ? Colors.white : Colors.transparent,
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: done
-                    ? Icon(Icons.check, color: color, size: 20)
-                    : null,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 18.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 10,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          category == 'cleaning'
+                              ? Icons.auto_awesome
+                              : category == 'personal'
+                              ? Icons.favorite
+                              : category == 'learning'
+                              ? Icons.emoji_events
+                              : category == 'helping'
+                              ? Icons.star
+                              : Icons.help_outline,
+                          size: 14,
+                          color: Colors.white,
                         ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              category == 'cleaning'
-                                  ? Icons.auto_awesome
-                                  : category == 'personal'
-                                      ? Icons.favorite
-                                      : category == 'learning'
-                                          ? Icons.emoji_events
-                                          : category == 'helping'
-                                              ? Icons.star
-                                              : Icons.help_outline,
-                              size: 14,
-                              color: Colors.white,
-                            ),
-                            const SizedBox(width: 2),
-                            Text(
-                              category,
-                              style: TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ],
+                        const SizedBox(width: 2),
+                        Text(
+                          category,
+                          style: TextStyle(fontSize: 12, color: Colors.white),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.access_time, size: 14, color: Colors.white),
-                            const SizedBox(width: 2),
-                            Text(
-                              'Today',
-                              style: TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Text(
-                    '$points points',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
+                      ],
                     ),
                   ),
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      shadows: [
-                        Shadow(
-                          color: Colors.black12,
-                          blurRadius: 2,
-                          offset: Offset(0, 1),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.access_time, size: 14, color: Colors.white),
+                        const SizedBox(width: 2),
+                        Text(
+                          'Today',
+                          style: TextStyle(fontSize: 12, color: Colors.white),
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-            ),
+              // const Spacer(),
+              Text(
+                '$points points',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black12,
+                      blurRadius: 2,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Text(
-              emoji,
-              style: TextStyle(fontSize: 32),
-            ),
-          ),
+          Text(emoji, style: TextStyle(fontSize: 32)),
         ],
       ),
     );

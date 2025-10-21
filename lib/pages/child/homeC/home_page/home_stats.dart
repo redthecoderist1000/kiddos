@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:kiddos/components/provider/KiddosProvider.dart';
+import 'package:provider/provider.dart';
 
 class HomeStats extends StatelessWidget {
-  final int tasksDone;
-  final int pointsEarned;
-
-  const HomeStats({
-    super.key,
-    required this.tasksDone,
-    required this.pointsEarned,
-  });
+  const HomeStats({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<KiddosProvider>(context);
+
     return Row(
       children: [
         Expanded(
-          child: _StatCard(label: 'Tasks Done', value: '${tasksDone}'),
+          child: _StatCard(
+            label: 'Tasks Done',
+            value: '${provider.userDetails?['completed_task']}',
+          ),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: _StatCard(label: 'Points Earned', value: '${pointsEarned}'),
+          child: _StatCard(
+            label: 'Current Points',
+            value: '${provider.userDetails?['current_points']}',
+          ),
         ),
       ],
     );
@@ -39,11 +42,7 @@ class _StatCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 8,
-            offset: Offset(0, 2),
-          ),
+          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -57,10 +56,7 @@ class _StatCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-          ),
+          Text(label, style: TextStyle(fontSize: 14, color: Colors.grey[700])),
         ],
       ),
     );

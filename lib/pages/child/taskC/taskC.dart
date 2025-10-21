@@ -4,7 +4,6 @@ import '../homeC/home_page/home_task_card.dart';
 import '../../../models/task.dart';
 import '../../../db/task_database_helper.dart';
 
-
 class TaskC extends StatefulWidget {
   const TaskC({super.key});
 
@@ -53,7 +52,7 @@ class _TtaskCState extends State<TaskC> {
     }
   }
 
-  final List<String> tasks = []; 
+  final List<String> tasks = [];
 
   final List<Map<String, dynamic>> tabs = [
     {
@@ -190,7 +189,11 @@ class _TtaskCState extends State<TaskC> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.track_changes, color: Color(0xFF9810FA), size: 48),
+                              const Icon(
+                                Icons.track_changes,
+                                color: Color(0xFF9810FA),
+                                size: 48,
+                              ),
                               const SizedBox(height: 12),
                               const Text(
                                 'Ready to Start!',
@@ -212,7 +215,10 @@ class _TtaskCState extends State<TaskC> {
                               ),
                               const SizedBox(height: 18),
                               Container(
-                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                  horizontal: 18,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(16),
@@ -226,7 +232,11 @@ class _TtaskCState extends State<TaskC> {
                                 ),
                                 child: Column(
                                   children: const [
-                                    Icon(Icons.star, color: Color(0xFFFFC700), size: 32),
+                                    Icon(
+                                      Icons.star,
+                                      color: Color(0xFFFFC700),
+                                      size: 32,
+                                    ),
                                     SizedBox(height: 8),
                                     Text(
                                       "Tasks will appear here when your parents add them!",
@@ -270,7 +280,11 @@ class _TtaskCState extends State<TaskC> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.access_alarm, color: Color(0xFFB97A1A), size: 48),
+                              const Icon(
+                                Icons.access_alarm,
+                                color: Color(0xFFB97A1A),
+                                size: 48,
+                              ),
                               const SizedBox(height: 12),
                               const Text(
                                 'Nothing waiting!',
@@ -321,7 +335,11 @@ class _TtaskCState extends State<TaskC> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.emoji_events, color: Color(0xFF1BAA4A), size: 48),
+                              const Icon(
+                                Icons.emoji_events,
+                                color: Color(0xFF1BAA4A),
+                                size: 48,
+                              ),
                               const SizedBox(height: 12),
                               const Text(
                                 'Ready for Success!',
@@ -343,7 +361,10 @@ class _TtaskCState extends State<TaskC> {
                               ),
                               const SizedBox(height: 18),
                               Container(
-                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                  horizontal: 18,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(16),
@@ -357,7 +378,11 @@ class _TtaskCState extends State<TaskC> {
                                 ),
                                 child: Column(
                                   children: const [
-                                    Icon(Icons.celebration, color: Color(0xFF9810FA), size: 32),
+                                    Icon(
+                                      Icons.celebration,
+                                      color: Color(0xFF9810FA),
+                                      size: 32,
+                                    ),
                                     SizedBox(height: 8),
                                     Text(
                                       "Every completed task is a step toward earning points and rewards!",
@@ -392,17 +417,21 @@ class _TtaskCState extends State<TaskC> {
                   itemBuilder: (context, index) {
                     final task = filteredTasks[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 16.0,
+                      ),
                       child: HomeTaskCard(
-                        color: _getCardColor(task.category), // Use category color
-                        emoji: _getCardEmoji(task.category), // Use category emoji
+                        color: _getCardColor(
+                          task.category,
+                        ), // Use category color
+                        emoji: _getCardEmoji(
+                          task.category,
+                        ), // Use category emoji
                         category: task.category,
                         points: task.points,
                         title: task.title,
                         done: task.isDone,
-                        onCheck: () {
-                          // Handle check logic if needed
-                        },
                       ),
                     );
                   },

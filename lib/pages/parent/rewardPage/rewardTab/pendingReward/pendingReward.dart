@@ -1,88 +1,134 @@
 import 'package:flutter/material.dart';
+import 'package:kiddos/components/Snackbar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'pendingRewardTile.dart';
 
-class PendingRewardPage extends StatelessWidget {
+class PendingRewardPage extends StatefulWidget {
   const PendingRewardPage({Key? key}) : super(key: key);
 
-  final List<Map<String, dynamic>> pendingRewards = const [
-    {
-      'childName': 'Emma',
-      'rewardTitle': 'Ice Cream Treat',
-      'description': 'Choose your favorite flavor',
-      'points': 75,
-      'requestedDate': '2 hours ago',
-      'category': 'Treats',
-    },
-    {
-      'childName': 'Max',
-      'rewardTitle': 'Extra Playtime',
-      'description': '30 minutes of extra playtime',
-      'points': 50,
-      'requestedDate': '3 hours ago',
-      'category': 'Privileges',
-    },
-    {
-      'childName': 'Lily',
-      'rewardTitle': 'Movie Night',
-      'description': 'Pick any movie for family night',
-      'points': 100,
-      'requestedDate': '1 hour ago',
-      'category': 'Activities',
-    },
-    {
-      'childName': 'Ben',
-      'rewardTitle': 'New Toy',
-      'description': 'Choose from the toy store',
-      'points': 120,
-      'requestedDate': '4 hours ago',
-      'category': 'Toys',
-    },
-  ];
+  @override
+  State<PendingRewardPage> createState() => _PendingRewardPageState();
+}
+
+class _PendingRewardPageState extends State<PendingRewardPage> {
+  final supabase = Supabase.instance.client;
+  final requestedChannel = Supabase.instance.client.channel(
+    'requested-rewards-channel',
+  );
+
+  Future<dynamic> loadData() async {
+    try {
+      final res = await supabase
+          .from('vw_rewardparent')
+          .select()
+          .eq('status', 'Requested');
+      return res;
+    } catch (e) {
+      throw Exception('Failed to load pending rewards.');
+    }
+  }
+
+  getTimeFromTimestamp(String timestamp) {
+    DateTime activityTime = DateTime.parse(timestamp).toLocal();
+    Duration difference = DateTime.now().difference(activityTime);
+
+    if (difference.inMinutes < 1) {
+      return 'just now';
+    } else if (difference.inHours < 1) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inDays < 1) {
+      return '${difference.inHours} hours ago';
+    } else {
+      return '${difference.inDays} days ago';
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    requestedChannel
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'tbl_reward_transaction',
+          callback: (payload) {
+            setState(() {});
+          },
+        )
+        .subscribe();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    supabase.removeChannel(requestedChannel);
+  }
+
+  denyRequest(reward_tran_id) async {
+    try {
+      await supabase
+          .from('tbl_reward_transaction')
+          .update({
+            'status': 'Rejected',
+            'updated_at': DateTime.now().toUtc().toIso8601String(),
+          })
+          .eq('id', reward_tran_id);
+
+      setSnackBar('Request updated successfully', context, Colors.green);
+    } catch (e) {
+      setSnackBar('Failed to update request', context, Colors.red);
+    }
+  }
+
+  approveRequest(reward_tran_id) async {
+    try {
+      await supabase
+          .from('tbl_reward_transaction')
+          .update({
+            'status': 'Accepted',
+            'updated_at': DateTime.now().toUtc().toIso8601String(),
+          })
+          .eq('id', reward_tran_id);
+
+      setSnackBar('Request updated successfully', context, Colors.green);
+    } catch (e) {
+      setSnackBar('Failed to update request', context, Colors.red);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (pendingRewards.isEmpty)
-            const Center(
-              child: Column(
-                children: [
-                  SizedBox(height: 100),
-                  Icon(Icons.pending_actions, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text(
-                    'No pending rewards.',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                ],
-              ),
-            )
-          else
-            ...pendingRewards
-                .map(
-                  (reward) => PendingRewardTile(
-                    childName: reward['childName'] as String,
-                    rewardTitle: reward['rewardTitle'] as String,
-                    description: reward['description'] as String,
-                    points: reward['points'] as int,
-                    requestedDate: reward['requestedDate'] as String,
-                    category: reward['category'] as String,
-                    onApprove: () {
-                      // Handle approve
-                      print('Approved: ${reward['rewardTitle']}');
-                    },
-                    onReject: () {
-                      // Handle reject
-                      print('Rejected: ${reward['rewardTitle']}');
-                    },
-                  ),
-                )
-                .toList(),
-        ],
-      ),
+    return FutureBuilder(
+      future: loadData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || (snapshot.data).isEmpty) {
+          return const Center(child: Text('No pending rewards found.'));
+        } else {
+          final rewards = snapshot.data;
+          return ListView.builder(
+            itemCount: rewards.length,
+            itemBuilder: (context, index) {
+              final reward = rewards[index];
+              return PendingRewardTile(
+                childName: reward['user_name'] as String,
+                rewardTitle: reward['item_name'] as String,
+                description: reward['description'] ?? '',
+                points: reward['required_points'] as int,
+                requestedDate: getTimeFromTimestamp(reward['updated_at']),
+                category: reward['category'] as String,
+                onApprove: () => approveRequest(reward['reward_tran_id']),
+                onReject: () => denyRequest(reward['reward_tran_id']),
+              );
+            },
+          );
+        }
+      },
     );
   }
 }

@@ -68,10 +68,7 @@ class _ParentScaffoldState extends State<ParentScaffold> {
                 icon: Icon(Icons.family_restroom_rounded),
                 label: 'Profiles',
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.face),
-                label: 'Me',
-              ),
+              BottomNavigationBarItem(icon: Icon(Icons.face), label: 'Me'),
             ],
           ),
         ),

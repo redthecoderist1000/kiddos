@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kiddos/components/Snackbar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AddRewardModal extends StatefulWidget {
-  final Function(Map<String, dynamic>) onRewardAdded;
-
-  const AddRewardModal({Key? key, required this.onRewardAdded})
-    : super(key: key);
+  const AddRewardModal({Key? key}) : super(key: key);
 
   @override
   State<AddRewardModal> createState() => _AddRewardModalState();
 }
 
 class _AddRewardModalState extends State<AddRewardModal> {
+  final supabase = Supabase.instance.client;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController pointsController = TextEditingController();
+  final TextEditingController titleCon = TextEditingController();
+  final TextEditingController descCon = TextEditingController();
+  final TextEditingController pointsCon = TextEditingController();
   String selectedCategory = 'Treats';
 
   final List<String> categories = [
@@ -27,9 +28,9 @@ class _AddRewardModalState extends State<AddRewardModal> {
 
   @override
   void dispose() {
-    titleController.dispose();
-    descriptionController.dispose();
-    pointsController.dispose();
+    titleCon.dispose();
+    descCon.dispose();
+    pointsCon.dispose();
     super.dispose();
   }
 
@@ -39,74 +40,77 @@ class _AddRewardModalState extends State<AddRewardModal> {
     }
 
     final newReward = {
-      'title': titleController.text,
-      'description': descriptionController.text,
-      'points': int.tryParse(pointsController.text),
+      'title': titleCon.text,
+      'description': descCon.text == '' ? null : descCon.text,
+      'points': int.tryParse(pointsCon.text),
       'category': selectedCategory,
     };
-
-    print('New Reward: $newReward');
+    try {
+      await supabase.from('tbl_reward').insert({
+        'item_name': newReward['title'],
+        'description': newReward['description'],
+        'required_points': newReward['points'],
+        'category': newReward['category'],
+      });
+      context.pop();
+      setSnackBar('Reward created successfully!', context, Colors.green);
+    } catch (e) {
+      print(e);
+      context.pop();
+      setSnackBar('Failed to create reward at this time.', context, Colors.red);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
+    return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.9,
-        padding: const EdgeInsets.all(24),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
+      title: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.pink.shade50,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              Icons.card_giftcard,
+              color: Colors.pink.shade400,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          const Text(
+            'Create New Reward',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          const Spacer(),
+          GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.close, color: Colors.grey.shade600, size: 16),
+            ),
+          ),
+        ],
+      ),
+      content: SingleChildScrollView(
         child: Form(
           key: formKey,
           child: Column(
+            spacing: 10,
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header with close button
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.pink.shade50,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Icon(
-                      Icons.card_giftcard,
-                      color: Colors.pink.shade400,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Text(
-                    'Create New Reward',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.close,
-                        color: Colors.grey.shade600,
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 24),
-
-              // Reward Title
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -139,10 +143,11 @@ class _AddRewardModalState extends State<AddRewardModal> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
-                      controller: titleController,
+                      controller: titleCon,
                       decoration: const InputDecoration(
                         hintText: 'e.g. Ice cream treat',
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                        errorStyle: TextStyle(color: Colors.red, fontSize: 12),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 16,
@@ -159,9 +164,6 @@ class _AddRewardModalState extends State<AddRewardModal> {
                   ),
                 ],
               ),
-
-              const SizedBox(height: 20),
-
               // Description
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +183,7 @@ class _AddRewardModalState extends State<AddRewardModal> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
-                      controller: descriptionController,
+                      controller: descCon,
                       maxLines: 3,
                       decoration: const InputDecoration(
                         hintText: 'Details about the reward...',
@@ -196,8 +198,6 @@ class _AddRewardModalState extends State<AddRewardModal> {
                   ),
                 ],
               ),
-
-              const SizedBox(height: 20),
 
               // Point Cost and Category Row
               Row(
@@ -222,7 +222,7 @@ class _AddRewardModalState extends State<AddRewardModal> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: TextFormField(
-                            controller: pointsController,
+                            controller: pointsCon,
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
                               hintText: '50',
@@ -310,68 +310,47 @@ class _AddRewardModalState extends State<AddRewardModal> {
                   ),
                 ],
               ),
-
-              const SizedBox(height: 32),
-
-              // Action Buttons
-              Row(
-                children: [
-                  // Cancel Button
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(width: 16),
-
-                  // Create Reward Button
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (titleController.text.isNotEmpty &&
-                            pointsController.text.isNotEmpty) {
-                          createReward();
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink.shade400,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Create Reward',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () => context.pop(),
+          style: TextButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: Text(
+            'Cancel',
+            style: TextStyle(
+              color: Colors.grey.shade600,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: createReward,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.pink.shade400,
+            padding: const EdgeInsets.all(13),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            elevation: 0,
+          ),
+          child: const Text(
+            'Create Reward',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

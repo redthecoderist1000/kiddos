@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class KiddosProvider with ChangeNotifier {
-  Map<String, dynamic>? _userDetails;
+  Map<String, dynamic>? _userDetails = {'user_name': ''};
 
   Map<String, dynamic>? get userDetails => _userDetails;
 

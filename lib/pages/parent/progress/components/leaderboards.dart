@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kiddos/pages/parent/progress/components/top3.dart';
 
 class Leaderboards extends StatelessWidget {
-  const Leaderboards({super.key});
+  final List data;
+  const Leaderboards({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +22,10 @@ class Leaderboards extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         // top 3
-        Top3(list: leaderboards),
+        Top3(list: data),
 
         // etc..
-        leaderboards.length > 3
+        data.length > 3
             ? Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 40.0,
@@ -65,8 +66,8 @@ class Leaderboards extends StatelessWidget {
                                     backgroundColor: Colors.grey[200],
                                     child: Icon(Icons.face_5_rounded, size: 30),
                                   ),
-                                  Text(item['name']),
-                                  Text(item['score'].toString()),
+                                  Text(item['user_name']),
+                                  Text(item['total_earned'].toString()),
                                 ],
                               ),
                             ),

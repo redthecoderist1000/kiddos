@@ -14,16 +14,13 @@ class RewardPage extends StatefulWidget {
 class _RewardPageState extends State<RewardPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  int selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(() {
-      setState(() {
-        selectedIndex = _tabController.index;
-      });
+      setState(() {});
     });
   }
 
@@ -89,7 +86,7 @@ class _RewardPageState extends State<RewardPage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(tabData.length, (index) {
-                      final isSelected = selectedIndex == index;
+                      final isSelected = _tabController.index == index;
                       return Expanded(
                         child: Padding(
                           padding: EdgeInsets.only(

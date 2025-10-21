@@ -1,82 +1,108 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'rewardHistoryTile.dart';
 
-class RewardHistory extends StatelessWidget {
+class RewardHistory extends StatefulWidget {
   const RewardHistory({Key? key}) : super(key: key);
 
-  final List<Map<String, dynamic>> rewardHistory = const [
-    {
-      'childName': 'Emma',
-      'rewardTitle': 'Movie Night',
-      'description': 'Pick a movie for family night',
-      'points': 100,
-      'redeemedDate': '1 day ago',
-      'category': 'Activities',
-      'isApproved': true,
-    },
-    {
-      'childName': 'Sophie',
-      'rewardTitle': 'New Book',
-      'description': 'Pick a book from the store',
-      'points': 120,
-      'redeemedDate': '2 days ago',
-      'category': 'Others',
-      'isApproved': true,
-    },
-    {
-      'childName': 'Emma',
-      'rewardTitle': 'Ice Cream Treat',
-      'description': 'Choose your favorite flavor',
-      'points': 75,
-      'redeemedDate': '3 days ago',
-      'category': 'Treats',
-      'isApproved': false,
-    },
-    {
-      'childName': 'Max',
-      'rewardTitle': 'Extra Playtime',
-      'description': '30 minutes of extra playtime',
-      'points': 50,
-      'redeemedDate': '1 week ago',
-      'category': 'Privileges',
-      'isApproved': true,
-    },
-  ];
+  @override
+  State<RewardHistory> createState() => _RewardHistoryState();
+}
+
+class _RewardHistoryState extends State<RewardHistory> {
+  final supabase = Supabase.instance.client;
+  final requestedChannel = Supabase.instance.client.channel(
+    'history-rewards-channel',
+  );
+
+  Future<dynamic> loadData() async {
+    try {
+      final res = await supabase
+          .from('vw_rewardparent')
+          .select()
+          .neq('status', 'Requested');
+      return res;
+    } catch (e) {
+      throw Exception('Failed to load pending rewards.');
+    }
+  }
+
+  getTimeFromTimestamp(String timestamp) {
+    DateTime activityTime = DateTime.parse(timestamp).toLocal();
+    Duration difference = DateTime.now().difference(activityTime);
+
+    if (difference.inMinutes < 1) {
+      return 'just now';
+    } else if (difference.inHours < 1) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inDays < 1) {
+      return '${difference.inHours} hours ago';
+    } else {
+      return '${difference.inDays} days ago';
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    requestedChannel
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'tbl_reward_transaction',
+          callback: (payload) {
+            setState(() {});
+          },
+        )
+        .subscribe();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    supabase.removeChannel(requestedChannel);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (rewardHistory.isEmpty)
-          const Center(
-            child: Column(
-              children: [
-                SizedBox(height: 100),
-                Icon(Icons.history, size: 64, color: Colors.grey),
-                SizedBox(height: 16),
-                Text(
-                  'No reward history yet.',
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
-                ),
-              ],
-            ),
-          )
-        else
-          ...rewardHistory
-              .map(
-                (reward) => RewardHistoryTile(
-                  childName: reward['childName'] as String,
-                  rewardTitle: reward['rewardTitle'] as String,
-                  description: reward['description'] as String,
-                  points: reward['points'] as int,
-                  redeemedDate: reward['redeemedDate'] as String,
-                  category: reward['category'] as String,
-                  isApproved: reward['isApproved'] as bool? ?? true,
-                ),
-              )
-              .toList(),
-      ],
+    return FutureBuilder(
+      future: loadData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final rewards = snapshot.data;
+          return ListView.builder(
+            itemCount: rewards.length,
+            itemBuilder: (context, index) {
+              final reward = rewards[index];
+              return RewardHistoryTile(
+                childName: reward['user_name'] as String,
+                rewardTitle: reward['item_name'] as String,
+                description: reward['description'] ?? '',
+                points: reward['required_points'] as int,
+                redeemedDate: getTimeFromTimestamp(reward['updated_at']),
+                category: reward['category'] as String,
+                isApproved: reward['status'] == 'Accepted' ? true : false,
+              );
+            },
+          );
+        }
+      },
     );
   }
 }
+
+// RewardHistoryTile(
+//   childName: reward['childName'] as String,
+//   rewardTitle: reward['rewardTitle'] as String,
+//   description: reward['description'] as String,
+//   points: reward['points'] as int,
+//   redeemedDate: reward['redeemedDate'] as String,
+//   category: reward['category'] as String,
+//   isApproved: reward['isApproved'] as bool? ?? true,
+//   ),

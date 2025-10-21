@@ -27,8 +27,8 @@ class Top3 extends StatelessWidget {
                   left: screenWidth * 0.15, // 15% from left
                   child: LeaderBoardIcon(
                     isTop1: false,
-                    name: list[1]['name'],
-                    score: list[1]['score'],
+                    name: list[1]['user_name'],
+                    score: list[1]['total_earned'],
                   ),
                 ),
 
@@ -40,15 +40,15 @@ class Top3 extends StatelessWidget {
                   right: screenWidth * 0.15, // 15% from right
                   child: LeaderBoardIcon(
                     isTop1: false,
-                    name: list[2]['name'],
-                    score: list[2]['score'],
+                    name: list[2]['user_name'],
+                    score: list[2]['total_earned'],
                   ),
                 ),
           Center(
             child: LeaderBoardIcon(
               isTop1: true,
-              name: first['name'],
-              score: first['score'],
+              name: first['user_name'],
+              score: first['total_earned'],
             ),
           ),
         ],

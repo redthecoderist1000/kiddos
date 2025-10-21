@@ -28,15 +28,14 @@ class _FamilyMemberListState extends State<FamilyMemberList> {
   void initState() {
     super.initState();
 
-    childChannel.onPostgresChanges(
-      event: PostgresChangeEvent.all,
-      schema: 'public',
-      table: 'tbl_user',
-      callback: (payload) => {
-        print('Change received in tbl_user: $payload'),
-        setState(() {}),
-      },
-    );
+    childChannel
+        .onPostgresChanges(
+          event: PostgresChangeEvent.all,
+          schema: 'public',
+          table: 'tbl_user',
+          callback: (payload) => {setState(() {})},
+        )
+        .subscribe();
   }
 
   @override

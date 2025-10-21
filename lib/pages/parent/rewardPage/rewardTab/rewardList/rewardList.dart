@@ -25,44 +25,21 @@ class _RewardListState extends State<RewardList> {
     'Others',
   ];
 
-  final List<Map<String, dynamic>> allRewards = [
-    {
-      'category': 'Privileges',
-      'points': 50,
-      'title': 'Extra Playtime',
-      'description': '30 minutes of extra playtime',
-    },
-    {
-      'category': 'Treats',
-      'points': 25,
-      'title': 'Ice Cream',
-      'description': 'Choose your favorite flavor',
-    },
-    {
-      'category': 'Activities',
-      'points': 75,
-      'title': 'Movie Night',
-      'description': 'Pick any movie for family night',
-    },
-    {
-      'category': 'Privileges',
-      'points': 30,
-      'title': 'Stay Up Late',
-      'description': '1 hour past bedtime on weekend',
-    },
-    {
-      'category': 'Toys',
-      'points': 100,
-      'title': 'New Action Figure',
-      'description': 'Choose from the toy store',
-    },
-    {
-      'category': 'Others',
-      'points': 40,
-      'title': 'Special Breakfast',
-      'description': 'Pancakes with your favorite toppings',
-    },
-  ];
+  Future<dynamic> loadRewards() async {
+    try {
+      var query = supabase.from('vw_rewardlistp').select('*');
+
+      if (selectedCategory != 'All') {
+        query = query.eq('category', selectedCategory);
+      }
+
+      final res = await query.order('points', ascending: false);
+
+      return res;
+    } catch (e) {
+      throw Exception('Failed to load rewards.');
+    }
+  }
 
   @override
   void initState() {
@@ -87,135 +64,143 @@ class _RewardListState extends State<RewardList> {
 
   @override
   Widget build(BuildContext context) {
-    Future<dynamic> loadRewards() async {
-      try {
-        var query = supabase.from('vw_rewardlistp').select('*');
-
-        if (selectedCategory != 'All') {
-          query = query.eq('category', selectedCategory);
-        }
-
-        final res = await query.order('points', ascending: false);
-
-        return res;
-      } catch (e) {
-        throw 'Error loading rewards: $e';
-      }
-    }
-
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Create New Reward Button
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Create New Reward Button
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                child: CustomButton(
+                  text: 'Create New Reward',
+                  icon: Icons.add,
+                  backgroundColor: Colors.green,
+                  textColor: Colors.white,
+                  iconColor: Colors.white,
+                  onPressed: () {
+                    _showCreateRewardModal();
+                  },
+                ),
+              ),
             ),
-            child: SizedBox(
-              width: double.infinity,
-              child: CustomButton(
-                text: 'Create New Reward',
-                icon: Icons.add,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                iconColor: Colors.white,
-                onPressed: () {
-                  _showCreateRewardModal();
+
+            // Category Filter
+            Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              height: 50,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+                  final isSelected = selectedCategory == category;
+
+                  return Container(
+                    margin: const EdgeInsets.only(right: 12.0),
+                    child: FilterChip(
+                      label: Text(
+                        category,
+                        style: TextStyle(
+                          color: isSelected
+                              ? Colors.white
+                              : Colors.grey.shade700,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
+                      ),
+                      selected: isSelected,
+                      onSelected: (selected) {
+                        setState(() {
+                          selectedCategory = category;
+                        });
+                      },
+                      selectedColor: Colors.blue,
+                      backgroundColor: Colors.grey.shade200,
+                      checkmarkColor: Colors.white,
+                      elevation: isSelected ? 2 : 0,
+                    ),
+                  );
                 },
               ),
             ),
-          ),
 
-          // Category Filter
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            height: 50,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-                final isSelected = selectedCategory == category;
+            const SizedBox(height: 8),
 
-                return Container(
-                  margin: const EdgeInsets.only(right: 12.0),
-                  child: FilterChip(
-                    label: Text(
-                      category,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.grey.shade700,
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+            FutureBuilder(
+              future: loadRewards(),
+              builder: (context, asyncSnapshot) {
+                if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox(
+                    height: 400,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Center(child: CircularProgressIndicator()),
+                      ],
+                    ),
+                  );
+                }
+
+                if (asyncSnapshot.hasError) {
+                  return SizedBox(
+                    height: 400,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Center(child: Text('${asyncSnapshot.error}'))],
+                    ),
+                  );
+                }
+
+                final rewards = asyncSnapshot.data;
+
+                // No rewards available
+                if (rewards == null || (rewards as List).isEmpty) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        'No rewards available in this category.',
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
-                    selected: isSelected,
-                    onSelected: (selected) {
-                      setState(() {
-                        selectedCategory = category;
-                      });
-                    },
-                    selectedColor: Colors.blue,
-                    backgroundColor: Colors.grey.shade200,
-                    checkmarkColor: Colors.white,
-                    elevation: isSelected ? 2 : 0,
-                  ),
+                  );
+                }
+
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: rewards.length,
+                  itemBuilder: (context, index) {
+                    final reward = rewards[index];
+                    return RewardListTile(
+                      category: reward['category'].toString().toLowerCase(),
+                      points: reward['points'] as int,
+                      title: reward['title'] as String,
+                      description: reward['description'] ?? '',
+                      backgroundColor: _getCategoryColor(
+                        reward['category'] as String,
+                      ),
+                      icon: _getCategoryIcon(reward['category'] as String),
+                    );
+                  },
                 );
               },
             ),
-          ),
-
-          const SizedBox(height: 8),
-
-          FutureBuilder(
-            future: loadRewards(),
-            builder: (context, asyncSnapshot) {
-              if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              if (asyncSnapshot.hasError) {
-                return Center(child: Text('${asyncSnapshot.error}'));
-              }
-
-              final rewards = asyncSnapshot.data;
-
-              // No rewards available
-              if (rewards == null || (rewards as List).isEmpty) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: Text(
-                      'No rewards available in this category.',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                );
-              }
-
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: rewards.length,
-                itemBuilder: (context, index) {
-                  final reward = rewards[index];
-                  return RewardListTile(
-                    category: reward['category'].toString().toLowerCase(),
-                    points: reward['points'] as int,
-                    title: reward['title'] as String,
-                    description: reward['description'] ?? '',
-                    backgroundColor: _getCategoryColor(
-                      reward['category'] as String,
-                    ),
-                    icon: _getCategoryIcon(reward['category'] as String),
-                  );
-                },
-              );
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

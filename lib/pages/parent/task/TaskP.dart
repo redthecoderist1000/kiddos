@@ -63,8 +63,8 @@ class _TaskPState extends State<TaskP> with SingleTickerProviderStateMixin {
         ? 13
         : 15;
     double borderRadius = width < 400 ? 8 : 12;
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -143,8 +143,8 @@ class _TaskPState extends State<TaskP> with SingleTickerProviderStateMixin {
           ),
 
           // tab views
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.8,
+          Expanded(
+            // height: MediaQuery.of(context).size.height * 0.8,
             child: TabBarView(
               controller: tabController,
               children: [AssignedTab(), ToReviewTab(), CompletedTab()],

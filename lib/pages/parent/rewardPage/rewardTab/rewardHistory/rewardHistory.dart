@@ -67,32 +67,54 @@ class _RewardHistoryState extends State<RewardHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: loadData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else {
-          final rewards = snapshot.data;
-          return ListView.builder(
-            itemCount: rewards.length,
-            itemBuilder: (context, index) {
-              final reward = rewards[index];
-              return RewardHistoryTile(
-                childName: reward['user_name'] as String,
-                rewardTitle: reward['item_name'] as String,
-                description: reward['description'] ?? '',
-                points: reward['required_points'] as int,
-                redeemedDate: getTimeFromTimestamp(reward['updated_at']),
-                category: reward['category'] as String,
-                isApproved: reward['status'] == 'Accepted' ? true : false,
-              );
-            },
-          );
-        }
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {});
       },
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: FutureBuilder(
+          future: loadData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SizedBox(
+                height: 400,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [const Center(child: CircularProgressIndicator())],
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return SizedBox(
+                height: 400,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Center(child: Text('${snapshot.error}'))],
+                ),
+              );
+            } else {
+              final rewards = snapshot.data;
+              return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: rewards.length,
+                itemBuilder: (context, index) {
+                  final reward = rewards[index];
+                  return RewardHistoryTile(
+                    childName: reward['user_name'] as String,
+                    rewardTitle: reward['item_name'] as String,
+                    description: reward['description'] ?? '',
+                    points: reward['required_points'] as int,
+                    redeemedDate: getTimeFromTimestamp(reward['updated_at']),
+                    category: reward['category'] as String,
+                    isApproved: reward['status'] == 'Accepted' ? true : false,
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }

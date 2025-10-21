@@ -60,98 +60,83 @@ class _RewardPageState extends State<RewardPage>
       {'label': 'History', 'color': const Color(0xFF16C98D)},
     ];
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        setState(() {});
-      },
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            const Header(
-              title: 'Rewards',
-              subtitle: 'Create rewards your kids can earn with points',
-              imagePath: 'assets/gift.png',
-            ),
-
-            // Custom Tab Bar - using tabTaskP design
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(tabData.length, (index) {
-                      final isSelected = _tabController.index == index;
-                      return Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            right: index < tabData.length - 1 ? 8 : 0,
+    return Column(
+      children: [
+        const Header(
+          title: 'Rewards',
+          subtitle: 'Create rewards your kids can earn with points',
+          imagePath: 'assets/gift.png',
+        ),
+        // custome tabs
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(tabData.length, (index) {
+                  final isSelected = _tabController.index == index;
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        right: index < tabData.length - 1 ? 8 : 0,
+                      ),
+                      child: GestureDetector(
+                        onTap: () => _onTabSelected(index),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: horizontalPadding,
+                            vertical: verticalPadding,
                           ),
-                          child: GestureDetector(
-                            onTap: () => _onTabSelected(index),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: horizontalPadding,
-                                vertical: verticalPadding,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? tabData[index]['color'] as Color
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(
-                                  borderRadius,
-                                ),
-                                boxShadow: isSelected
-                                    ? [
-                                        const BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 2,
-                                        ),
-                                      ]
-                                    : [],
-                                border: Border.all(color: Colors.transparent),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                tabData[index]['label'] as String,
-                                style: TextStyle(
-                                  color: isSelected
-                                      ? Colors.white
-                                      : Colors.black87,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: fontSize,
-                                ),
-                              ),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? tabData[index]['color'] as Color
+                                : Colors.white,
+                            borderRadius: BorderRadius.circular(borderRadius),
+                            boxShadow: isSelected
+                                ? [
+                                    const BoxShadow(
+                                      color: Colors.black12,
+                                      blurRadius: 2,
+                                    ),
+                                  ]
+                                : [],
+                            border: Border.all(color: Colors.transparent),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            tabData[index]['label'] as String,
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.black87,
+                              fontWeight: FontWeight.w500,
+                              fontSize: fontSize,
                             ),
                           ),
                         ),
-                      );
-                    }),
-                  ),
-                ),
+                      ),
+                    ),
+                  );
+                }),
               ),
             ),
-
-            // Tab Views - Fixed height container
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.8,
-              child: TabBarView(
-                controller: _tabController,
-                children: const [
-                  RewardList(),
-                  PendingRewardPage(),
-                  RewardHistory(),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+
+        // Tab Views - Fixed height container
+        Expanded(
+          // height: MediaQuery.of(context).size.height * 0.8,
+          child: TabBarView(
+            controller: _tabController,
+            children: const [
+              RewardList(),
+              PendingRewardPage(),
+              RewardHistory(),
+            ],
+          ),
+        ),
+        // SizedBox(height: 20),
+      ],
     );
   }
 }

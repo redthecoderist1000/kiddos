@@ -32,7 +32,9 @@ class TabItem extends StatelessWidget {
         child: Container(
           height: isSmall ? 32 : 40,
           margin: EdgeInsets.symmetric(
-              horizontal: isSmall ? 2 : 4, vertical: isSmall ? 2 : 4),
+            horizontal: isSmall ? 2 : 4,
+            vertical: isSmall ? 2 : 4,
+          ),
           decoration: BoxDecoration(
             color: isSelected ? color : Colors.white,
             borderRadius: BorderRadius.circular(isSmall ? 10 : 16),
@@ -58,22 +60,22 @@ class TabItem extends StatelessWidget {
                 ),
               ),
               SizedBox(width: isSmall ? 3 : 6),
-              Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: isSmall ? 5 : 8, vertical: isSmall ? 1 : 2),
-                decoration: BoxDecoration(
-                  color: isSelected ? Colors.white.withOpacity(0.2) : badgeColor,
-                  borderRadius: BorderRadius.circular(isSmall ? 8 : 12),
-                ),
-                child: Text(
-                  count.toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: isSmall ? 10 : 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.symmetric(
+              //       horizontal: isSmall ? 5 : 8, vertical: isSmall ? 1 : 2),
+              //   decoration: BoxDecoration(
+              //     color: isSelected ? Colors.white.withOpacity(0.2) : badgeColor,
+              //     borderRadius: BorderRadius.circular(isSmall ? 8 : 12),
+              //   ),
+              //   child: Text(
+              //     count.toString(),
+              //     style: TextStyle(
+              //       color: Colors.white,
+              //       fontSize: isSmall ? 10 : 12,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

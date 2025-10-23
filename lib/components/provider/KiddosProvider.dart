@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class KiddosProvider with ChangeNotifier {
   Map<String, dynamic>? _userDetails = {'user_name': ''};
@@ -16,4 +17,13 @@ class KiddosProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // void autoUpdateUserDetails() {
+  //   final supabase = Supabase.instance.client;
+  //   final user = supabase.auth.currentUser;
+
+  //   if (_userDetails != null) {
+  //     notifyListeners();
+  //   }
+  // }
 }
